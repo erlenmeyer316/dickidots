@@ -3,6 +3,7 @@
 shopt -s nullglob
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/core.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/profile.sh"
 
 debug() {
   print_always "========================="
@@ -14,6 +15,48 @@ debug() {
   print_always "| Quiet:      $QUIET"
   print_always "| Dry Run:    $DRY_RUN"
   print_always "===================="
+}
+# ==============================================================
+# Do
+# ==============================================================
+do_apply() {
+  #setup-pre-apply
+  #do_apply_install
+  #do_apply_config
+  #setup-post-apply
+  true
+}
+
+do_apply_install() {
+  #setup-pre-apply-install
+  #setup-post-apply-install
+  true
+}
+
+do_apply_config() {
+  #setup-pre-apply-config
+  #setup-post-apply-config
+  true
+}
+
+do_remove() {
+  #setup-pre-remove
+  #do_remove_install
+  #do_remove_config
+  #setup-post-remove
+  true
+}
+
+do_remove_install() {
+  #setup-pre-remove-install
+  #setup-post-remove-install
+  true
+}
+
+do_remove_config() {
+  #setup-pre-remove-config
+  #setup-post-remove-config
+  true
 }
 
 # ==============================================================
@@ -28,16 +71,21 @@ cmd_apply() {
     exit 1
   fi
 
+  if ! dir_exists "${_PROFILE_DIR}/${PROFILE}"; then
+    print_always "Error: Profile ${PROFILE} doesn't exist"
+    exit 1
+  fi
+
   if [ -z "$SUBCOMMAND" ]; then
-    print_always "Apply install and config"
+    do_apply
   fi
 
   if [ "$SUBCOMMAND" == "install" ]; then
-    print_always "Apply install only"
+    do_apply_install
   fi
 
   if [ "$SUBCOMMAND" == "config" ]; then
-    print_always "Apply config only"
+    do_apply_config
   fi
 }
 
@@ -407,7 +455,13 @@ case "$COMMAND" in
     ;;
 esac
 
-#debug
+# Ensure profile exists
+if [[ ! -z $PROFILE ]]; then
+  if ! dir_exists "${_PROFILE_DIR}/${PROFILE}"; then
+    print_always "Error: Profile ${PROFILE} doesn't exist"
+    exit 1
+  fi
+fi
 
 case "$COMMAND" in
   apply) cmd_apply ;;
