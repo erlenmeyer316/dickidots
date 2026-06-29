@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-readonly _SCRIPT_DIR="$(cd "$(dirname "${BASHSOURCE[0]}")/.." >/dev/null 2>&1 && pwd)"
+readonly _SCRIPT_DIR="$(cd "$(dirname "${BASHSOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 # Utility functions
 
@@ -55,6 +55,6 @@ if [ "$_OS" = "Linux" ]; then
 fi
 
 readonly _LIB_DIR="${_SCRIPT_DIR}/lib"
-readonly _CONFIG_DIR="${DOTFILES_STOW_DIR:-${_SCRIPT_DIR}/stow}"
+readonly _CONFIG_DIR="${DOTFILES_STOW_DIR:-${_SCRIPT_DIR}/config}"
 readonly _SETUP_DIR="${DOTFILES_SETUP_DIR:-${_SCRIPT_DIR}/setup}"
-readonly _PROFILE_DIR="${DOTFILES_PROFILE_DIR:-${_SCRIPT_DIR}/profiles}"
+readonly _PROFILE_DIR="${DOTFILES_PROFILE_DIR:-${_SCRIPT_DIR}/profile}"
