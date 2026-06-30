@@ -59,6 +59,46 @@ do_remove_config() {
   true
 }
 
+do_list_profiles() {
+  true
+}
+
+do_list_configs() {
+  true
+}
+do_list_setups() {
+  true
+}
+do_list_profile_configs() {
+  true
+}
+do_list_profile_setups() {
+  true
+}
+do_list_profile_installs() {
+  true
+}
+
+do_create_profile() {
+  # create profile folder
+  # create files (TBD)
+  true
+}
+do_create_install() {
+  # create install in profile folder for current OS
+  true
+}
+do_create_setup() {
+  # create new setup folder
+  # create hook scripts
+  true
+}
+do_create_config() {
+  # craete new config folder
+  # TBD
+  true
+}
+
 # ==============================================================
 # Command
 # ==============================================================
@@ -93,22 +133,22 @@ cmd_remove() {
 
 cmd_list() {
   if [ "$SUBCOMMAND" == "profile" ]; then
-    print_always "List all profiles"
+    do_list_profiles
   fi
 
   if [ "$SUBCOMMAND" == "config" ]; then
     if [ -z "$PROILE" ]; then
-      print_always "List all config"
+      do_list_configs
     else
-      print_always "List configs for profile"
+      do_list_profile_configs
     fi
   fi
 
   if [ "$SUBCOMMAND" == "setup" ]; then
     if [ -z "$PROILE" ]; then
-      print_always "List all setups"
+      do_list_setups
     else
-      print_always "List setups for profile"
+      do_list_profile_setups
     fi
   fi
 
@@ -119,7 +159,7 @@ cmd_list() {
       usage "$COMMAND"
       exit 1
     else
-      print_always "List install for profile"
+      do_list_profile_installs
     fi
   fi
 }
@@ -132,7 +172,7 @@ cmd_new() {
       usage "$COMMAND"
       exit 1
     else
-      print_always "Create new profile"
+      do_create_profile
     fi
   fi
 
@@ -143,7 +183,7 @@ cmd_new() {
       usage "$COMMAND"
       exit 1
     else
-      print_always "Create new config"
+      do_create_config
     fi
   fi
 
@@ -154,7 +194,7 @@ cmd_new() {
       usage "$COMMAND"
       exit 1
     else
-      print_always "Create new setup"
+      do_create_setup
     fi
   fi
 
@@ -165,7 +205,7 @@ cmd_new() {
       usage "$COMMAND"
       exit 1
     else
-      print_always "Create new profile"
+      do_create_profile
     fi
   fi
 
@@ -435,6 +475,17 @@ case "$COMMAND" in
     esac
     ;;
 esac
+
+# Ensure name is given for new
+if [[ "$COMMAND" == @(new) ]]; then
+  if [[ -z $NAME ]]; then
+    print_always "Error: No name given"
+    print_always ""
+    usage "$COMMAND"
+    exit 1
+  fi
+
+fi
 
 # Ensure profile is given for apply/remove
 if [[ "$COMMAND" == @(apply|remove) ]]; then
