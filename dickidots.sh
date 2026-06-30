@@ -64,19 +64,7 @@ do_remove_config() {
 # ==============================================================
 
 cmd_apply() {
-  if [ -z "$PROFILE" ]; then
-    print_always "Error: No profile given"
-    print_always ""
-    usage "$COMMAND"
-    exit 1
-  fi
-
-  if ! dir_exists "${_PROFILE_DIR}/${PROFILE}"; then
-    print_always "Error: Profile ${PROFILE} doesn't exist"
-    exit 1
-  fi
-
-  if [ -z "$SUBCOMMAND" ]; then
+  if [[ -z "$SUBCOMMAND" ]]; then
     do_apply
   fi
 
@@ -90,23 +78,16 @@ cmd_apply() {
 }
 
 cmd_remove() {
-  if [ -z "$PROFILE" ]; then
-    print_always "Error: No profile given"
-    print_always ""
-    usage "$COMMAND"
-    exit 1
-  fi
-
-  if [ -z "$SUBCOMMAND" ]; then
-    print_always "Remove install and config"
+  if [[ -z "$SUBCOMMAND" ]]; then
+    do_remove
   fi
 
   if [ "$SUBCOMMAND" == "install" ]; then
-    print_always "Remove install only"
+    do_remove_install
   fi
 
   if [ "$SUBCOMMAND" == "config" ]; then
-    print_always "Remove config only"
+    do_remove_config
   fi
 }
 
@@ -455,7 +436,17 @@ case "$COMMAND" in
     ;;
 esac
 
-# Ensure profile exists
+# Ensure profile is given for apply/remove
+if [[ "$COMMAND" == @(apply|remove) ]]; then
+  if [[ -z $PROFILE ]]; then
+    print_always "Error: No profile given"
+    print_always ""
+    usage "$COMMAND"
+    exit 1
+  fi
+fi
+
+# Ensure given profile exists
 if [[ ! -z $PROFILE ]]; then
   if ! dir_exists "${_PROFILE_DIR}/${PROFILE}"; then
     print_always "Error: Profile ${PROFILE} doesn't exist"
