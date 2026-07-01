@@ -24,19 +24,19 @@ do_apply() {
   #do_apply_install
   #do_apply_config
   #setup-post-apply
-  true
+  print_msg "${FUNCNAME[0]}"
 }
 
 do_apply_install() {
   #setup-pre-apply-install
   #setup-post-apply-install
-  true
+  print_msg "${FUNCNAME[0]}"
 }
 
 do_apply_config() {
   #setup-pre-apply-config
   #setup-post-apply-config
-  true
+  print_msg "${FUNCNAME[0]}"
 }
 
 do_remove() {
@@ -44,59 +44,59 @@ do_remove() {
   #do_remove_install
   #do_remove_config
   #setup-post-remove
-  true
+  print_msg "${FUNCNAME[0]}"
 }
 
 do_remove_install() {
   #setup-pre-remove-install
   #setup-post-remove-install
-  true
+  print_msg "${FUNCNAME[0]}"
 }
 
 do_remove_config() {
   #setup-pre-remove-config
   #setup-post-remove-config
-  true
+  print_msg "${FUNCNAME[0]}"
 }
 
 do_list_profiles() {
-  true
+  print_msg "${FUNCNAME[0]}"
 }
 
 do_list_configs() {
-  true
+  print_msg "${FUNCNAME[0]}"
 }
 do_list_setups() {
-  true
+  print_msg "${FUNCNAME[0]}"
 }
 do_list_profile_configs() {
-  true
+  print_msg "${FUNCNAME[0]}"
 }
 do_list_profile_setups() {
-  true
+  print_msg "${FUNCNAME[0]}"
 }
 do_list_profile_installs() {
-  true
+  print_msg "${FUNCNAME[0]}"
 }
 
 do_create_profile() {
   # create profile folder
   # create files (TBD)
-  true
+  print_msg "${FUNCNAME[0]}"
 }
 do_create_install() {
   # create install in profile folder for current OS
-  true
+  print_msg "${FUNCNAME[0]}"
 }
 do_create_setup() {
   # create new setup folder
   # create hook scripts
-  true
+  print_msg "${FUNCNAME[0]}"
 }
 do_create_config() {
   # craete new config folder
   # TBD
-  true
+  print_msg "${FUNCNAME[0]}"
 }
 
 # ==============================================================
@@ -137,7 +137,7 @@ cmd_list() {
   fi
 
   if [ "$SUBCOMMAND" == "config" ]; then
-    if [ -z "$PROILE" ]; then
+    if [ -z "$PROFILE" ]; then
       do_list_configs
     else
       do_list_profile_configs
@@ -145,7 +145,7 @@ cmd_list() {
   fi
 
   if [ "$SUBCOMMAND" == "setup" ]; then
-    if [ -z "$PROILE" ]; then
+    if [ -z "$PROFILE" ]; then
       do_list_setups
     else
       do_list_profile_setups
@@ -153,7 +153,7 @@ cmd_list() {
   fi
 
   if [ "$SUBCOMMAND" == "install" ]; then
-    if [ -z "$PROILE" ]; then
+    if [ -z "$PROFILE" ]; then
       print_always "Error: No profile given"
       print_always ""
       usage "$COMMAND"
@@ -205,7 +205,7 @@ cmd_new() {
       usage "$COMMAND"
       exit 1
     else
-      do_create_profile
+      do_create_install
     fi
   fi
 
@@ -461,7 +461,7 @@ case "$COMMAND" in
         ;;
     esac
     ;;
-  apply | remove | list)
+  apply | remove)
     case "$1" in
       -p | --profile)
         PROFILE="$2"
@@ -471,6 +471,15 @@ case "$COMMAND" in
         print_always ""
         usage "$COMMAND"
         exit 1
+        ;;
+    esac
+    ;;
+  list)
+    case "$1" in
+      -p | --profile)
+        PROFILE="$2"
+        ;;
+      *)
         ;;
     esac
     ;;
