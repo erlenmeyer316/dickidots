@@ -4,6 +4,7 @@ shopt -s nullglob
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/core.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/profiles.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/configs.sh"
 
 debug() {
   print_always "========================="
@@ -92,9 +93,7 @@ do_create_setup() {
   print_msg "${FUNCNAME[0]}"
 }
 do_create_config() {
-  # craete new config folder
-  # TBD
-  print_msg "${FUNCNAME[0]}"
+  new_config "${NAME}"
 }
 
 # ==============================================================
