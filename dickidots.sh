@@ -5,6 +5,7 @@ shopt -s nullglob
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/core.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/profiles.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/configs.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/installs.sh"
 
 debug() {
   print_always "========================="
@@ -84,8 +85,7 @@ do_create_profile() {
   new_profile "${NAME}"
 }
 do_create_install() {
-  # create install in profile folder for current OS
-  print_msg "${FUNCNAME[0]}"
+  new_install "${PROFILE}"
 }
 do_create_setup() {
   # create new setup folder
@@ -196,8 +196,8 @@ cmd_new() {
   fi
 
   if [ "$SUBCOMMAND" == "install" ]; then
-    if [ -z "$NAME" ]; then
-      print_always "Error: No name given"
+    if [ -z "$PROFILE" ]; then
+      print_always "Error: No profile given"
       print_always ""
       usage "$COMMAND"
       exit 1
@@ -258,7 +258,7 @@ EOF
 
 _usage_new() {
   cat <<EOF
-Usage: dickidots new <subcommand> -n <name>
+Usage: dickidots new <subcommand> -p|-n <profile_name>|<name>
 
 Subcommands:
   profile    Create a new profile template
@@ -267,7 +267,8 @@ Subcommands:
   install    Create a new install template
 
 Options:
-  -n, --name <name>    The name of the item to create (Required)
+  -n, --name <name>        The name of the setup, config, or profile to be create
+  -p, --profile <profile>  The name of the profile to add a new install.binlist
 EOF
 }
 
@@ -450,6 +451,9 @@ case "$COMMAND" in
       -n | --name)
         NAME="$2"
         ;;
+      -p | --profile)
+        PROFILE="$2"
+        ;;
       *)
         print_always "Unknown option '$1'."
         print_always ""
@@ -481,35 +485,6 @@ case "$COMMAND" in
     esac
     ;;
 esac
-
-# Ensure name is given for new
-if [[ "$COMMAND" == @(new) ]]; then
-  if [[ -z $NAME ]]; then
-    print_always "Error: No name given"
-    print_always ""
-    usage "$COMMAND"
-    exit 1
-  fi
-
-fi
-
-# Ensure profile is given for apply/remove
-if [[ "$COMMAND" == @(apply|remove) ]]; then
-  if [[ -z $PROFILE ]]; then
-    print_always "Error: No profile given"
-    print_always ""
-    usage "$COMMAND"
-    exit 1
-  fi
-fi
-
-# Ensure given profile exists
-if [[ ! -z $PROFILE ]]; then
-  if ! dir_exists "${_PROFILE_DIR}/${PROFILE}"; then
-    print_always "Error: Profile ${PROFILE} doesn't exist"
-    exit 1
-  fi
-fi
 
 case "$COMMAND" in
   apply) cmd_apply ;;

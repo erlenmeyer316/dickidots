@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-readonly PROFILE_DIR="${DOTFILES_PROFILE_DIR:-${_SCRIPT_DIR}/profiles}"
+PROFILE_DIR="${DOTFILES_PROFILE_DIR:-${_SCRIPT_DIR}/profiles}"
 
 # =========================================================
 # New

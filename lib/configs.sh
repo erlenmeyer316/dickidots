@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # lib/configs.sh
 
-readonly CONFIG_DIR="${DOTFILES_CONFIG:-${_SCRIPT_DIR}/configs}"
+CONFIG_DIR="${DOTFILES_CONFIG:-${_SCRIPT_DIR}/configs}"
 
 # =========================================================
 # New
