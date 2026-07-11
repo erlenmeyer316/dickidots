@@ -3,7 +3,7 @@
 shopt -s nullglob
 
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/core.sh"
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/profile.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/profiles.sh"
 
 debug() {
   print_always "========================="
@@ -80,9 +80,7 @@ do_list_profile_installs() {
 }
 
 do_create_profile() {
-  # create profile folder
-  # create files (TBD)
-  print_msg "${FUNCNAME[0]}"
+  new_profile "${NAME}"
 }
 do_create_install() {
   # create install in profile folder for current OS

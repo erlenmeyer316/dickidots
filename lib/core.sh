@@ -14,11 +14,29 @@ print_msg() { [[ "$_QUIET" -eq 0 ]] && printf "%s\n" "$1"; }
 
 print_always() { printf "%s\n" "$1"; }
 
-list_file_contents() {
+file_list_contents() {
   file_exists "$1" && cat -n "$1"
 }
 
-contains_element() {
+file_create() {
+  if file_exists "${1}"; then
+    print_always "Error: ${1} already exist."
+    return 1
+  fi
+  touch "${1}"
+  return 0
+}
+
+dir_create() {
+  if dir_exists "${1}"; then
+    print_always "Error: ${1} already exist."
+    return 1
+  fi
+  mkdir -p "${1}"
+  return 1
+}
+
+array_contains_element() {
   local e match="$1"
   shift
   for e; do
@@ -55,5 +73,6 @@ if [ "$_OS" = "Linux" ]; then
 fi
 
 readonly _LIB_DIR="${_SCRIPT_DIR}/lib"
-readonly _CONFIG_DIR="${DOTFILES_STOW_DIR:-${_SCRIPT_DIR}/config}"
-readonly _SETUP_DIR="${DOTFILES_SETUP_DIR:-${_SCRIPT_DIR}/setup}"
+readonly _PROFILE_DIR="${DOTFILES_PROFILE_DIR:-${_SCRIPT_DIR}/profiles}"
+readonly _CONFIG_DIR="${DOTFILES_CONFIG_DIR:-${_SCRIPT_DIR}/configs}"
+readonly _SETUP_DIR="${DOTFILES_SETUP_DIR:-${_SCRIPT_DIR}/setups}"
