@@ -52,3 +52,8 @@ new_config() {
   done
 
 }
+
+list_configs() {
+  print_always "Not implemented"
+
+}

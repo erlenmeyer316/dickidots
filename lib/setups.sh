@@ -39,3 +39,8 @@ new_setup() {
   done
 
 }
+
+list_setups() {
+  print_always "Not implemented"
+
+}

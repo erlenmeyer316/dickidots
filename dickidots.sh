@@ -62,10 +62,6 @@ do_remove_config() {
   print_msg "${FUNCNAME[0]}"
 }
 
-do_list_profiles() {
-  print_msg "${FUNCNAME[0]}"
-}
-
 do_list_configs() {
   print_msg "${FUNCNAME[0]}"
 }
@@ -116,7 +112,7 @@ cmd_remove() {
 
 cmd_list() {
   if [ "$SUBCOMMAND" == "profile" ]; then
-    do_list_profiles
+    list_profiles
   fi
 
   if [ "$SUBCOMMAND" == "config" ]; then
