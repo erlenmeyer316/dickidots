@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 # lib/configs.sh
 
-CONFIG_DIR="${DOTFILES_CONFIG:-${_SCRIPT_DIR}/configs}"
-
 # =========================================================
 # New
 # =========================================================
@@ -13,38 +11,44 @@ new_config() {
     exit 1
   fi
 
+  local CONFIG_DIR="${DOTFILES_CONFIG:-${_SCRIPT_DIR}/configs}"
   local NEW_CONFIG_NAME="${1}"
   local NEW_CONFIG_PATH="${CONFIG_DIR}/${NEW_CONFIG_NAME}"
-  local BASH_DIR="${NEW_CONFIG_PATH}/.config/bash"
-  local BASH_ALIAS_DIR="${BASH_DIR}/aliases.d"
-  local BASH_COMPLETION_DIR="${BASH_DIR}/completions.d"
-  local BASH_CONFIG_DIR="${BASH_DIR}/config.d"
-  local BASH_FUNCTION_DIR="${BASH_DIR}/functions.d"
+  local NEW_BASH_PATH="${NEW_CONFIG_PATH}/.config/bash"
 
-  # create config directory
+  local NEW_DIRS=(
+    "${NEW_BASH_PATH}/aliases.d"
+    "${NEW_BASH_PATH}/completions.d"
+    "${NEW_BASH_PATH}/config.d"
+    "${NEW_BASH_PATH}/functions.d"
+  )
+
+  local NEW_FILES=(
+    "${NEW_BASH_PATH}/aliases.d/${NEW_CONFIG_NAME}.bash"
+    "${NEW_BASH_PATH}/completions.d/${NEW_CONFIG_NAME}.bash"
+    "${NEW_BASH_PATH}/config.d/${NEW_CONFIG_NAME}.bash"
+    "${NEW_BASH_PATH}/functions.d/${NEW_CONFIG_NAME}.bash"
+  )
+
   if dir_exists "${NEW_CONFIG_PATH}"; then
     print_always "Error: A config named ${NEW_CONFIG_PATH} already exists."
-    exit 0
-    #print_msg "Using existing config."
-    #print_always ""
-  else
-    dir_create "${NEW_CONFIG_PATH}"
+    exit 1
   fi
 
-  # create empty bash profile structure
+  dir_create "${NEW_CONFIG_PATH}"
+
   print_always "Create bash config struture for ${NEW_CONFIG_NAME}?"
   read -r -p "[y/N]: "
   if [[ "$REPLY" == "n" ]] || [[ "$REPLY" == "" ]]; then
     exit 1
   fi
 
-  dir_create "${BASH_ALIAS_DIR}"
-  dir_create "${BASH_COMPLETION_DIR}"
-  dir_create "${BASH_CONFIG_DIR}"
-  dir_create "${BASH_FUNCTION_DIR}"
+  for dir in "${!NEW_DIRS[@]}"; do
+    dir_create "${NEW_DIRS[$dir]}"
+  done
 
-  file_create "${BASH_ALIAS_DIR}/${NEW_CONFIG_NAME}.bash"
-  file_create "${BASH_COMPLETION_DIR}/${NEW_CONFIG_NAME}.bash"
-  file_create "${BASH_CONFIG_DIR}/${NEW_CONFIG_NAME}.bash"
-  file_create "${BASH_FUNCTION_DIR}/${NEW_CONFIG_NAME}.bash"
+  for file in "${!NEW_FILES[@]}"; do
+    file_create "${NEW_FILES[$file]}"
+  done
+
 }

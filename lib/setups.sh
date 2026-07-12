@@ -1,80 +1,41 @@
 #!/usr/bin/env bash
 
-#readonly SCRIPT_DIR="$(cd "$(dirname "${BASHSOURCE[0]}")" >/dev/null 2>&1 && pwd)"
-readonly PROFILE_DIR="${DOTFILES_PROFILE_DIR:-${_SCRIPT_DIR}/profiles}"
-readonly SETUPS_PKGLIST="setups.pkglist"
-readonly CONFIGS_PKGLIST="configs.pkglist"
-readonly PROFILE_DEPS_PKGLIST="profiles.deplist"
-readonly INSTALL_DEPS_PKGLIST="${_DISTRO}-${_VERSION}.binlist"
+#readonly SCRIPT_DIR="$(cd "$(dirname "${BASHSOUERCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 # =========================================================
 # New
 # =========================================================
 
-new_profile() {
+new_setup() {
   if [[ -z $1 ]]; then
     print_always "Error:${FUNCNAME[0]}}:Missing parameter: No name given."
     exit 1
   fi
 
-  local NEW_PROFILE_NAME="${1}"
-  local NEW_PROFILE_PATH="${PROFILE_DIR}/${NEW_PROFILE_NAME}"
+  local SETUP_DIR="${DOTFILES_PROFILE_DIR:-${_SCRIPT_DIR}/setups}"
+  local NEW_SETUP_NAME="${1}"
+  local NEW_SETUP_PATH="${SETUP_DIR}/${NEW_SETUP_NAME}"
+  local NEW_FILES=(
+    "${NEW_SETUP_PATH}/pre-apply.bash"
+    "${NEW_SETUP_PATH}/post-apply.bash"
+    "${NEW_SETUP_PATH}/pre-config.bash"
+    "${NEW_SETUP_PATH}/post-config.bash"
+    "${NEW_SETUP_PATH}/pre-setup.bash"
+    "${NEW_SETUP_PATH}/setup.bash"
+    "${NEW_SETUP_PATH}/post-setup.bash"
+    "${NEW_SETUP_PATH}/pre-install.bash"
+    "${NEW_SETUP_PATH}/post-install.bash"
+  )
 
-  # create profile directory
-  if dir_exists "$NEW_PROFILE_PATH"; then
-    print_always "A profile named ${NEW_PROFILE_PATH} already exists."
-    print_msg "Using existing profile."
-    print_always ""
-  else
-    mkdir -p "${NEW_PROFILE_PATH}"
+  if dir_exists "$NEW_SETUP_PATH"; then
+    print_always "Error: A setup named ${NEW_SETUP_NAME} already exists."
+    exit 1
   fi
 
-  # create empty setup package list
-  if ! file_exists "${NEW_PROFILE_PATH}/${SETUPS_PKGLIST}"; then
-    print_always "Create ${SETUPS_PKGLIST} for ${NEW_PROFILE_NAME}?"
-    read -r -p "[n/Y]: "
-    if [[ "$REPLY" == "y" ]] || [[ "$REPLY" == "" ]]; then
-      print_msg "Creating ${NEW_PROFILE_PATH}/${SETUPS_PKGLIST}"
-      touch "${NEW_PROFILE_PATH}/${SETUPS_PKGLIST}"
-    fi
-  else
-    print_msg "${NEW_PROFILE_PATH}/${SETUPS_PKGLIST} exists."
-    print_msg "Skipping..."
-  fi
+  dir_create "${NEW_SETUP_PATH}"
 
-  # create empty configs package list
-  if ! file_exists "${NEW_PROFILE_PATH}/${CONFIGS_PKGLIST}"; then
-    print_always "Create ${CONFIGS_PKGLIST} for ${NEW_PROFILE_NAME}?"
-    read -r -p "[n/Y]: "
-    if [[ "$REPLY" == "y" ]] || [[ "$REPLY" == "" ]]; then
-      touch "${NEW_PROFILE_PATH}/${CONFIGS_PKGLIST}"
-    fi
-  else
-    print_msg "${NEW_PROFILE_PATH}/${CONFIGS_PKGLIST} exists."
-    print_msg "Skipping..."
-  fi
+  for file in "${!NEW_FILES[@]}"; do
+    file_create "${NEW_FILES[$file]}"
+  done
 
-  # create empty profile dependency package list
-  if ! file_exists "${NEW_PROFILE_PATH}/${PROFILE_DEPS_PKGLIST}"; then
-    print_always "Create ${PROFILE_DEPS_PKGLIST} for ${NEW_PROFILE_NAME}?"
-    read -r -p "[n/Y]: "
-    if [[ "$REPLY" == "y" ]] || [[ "$REPLY" == "" ]]; then
-      touch "${NEW_PROFILE_PATH}/${PROFILE_DEPS_PKGLIST}"
-    fi
-  else
-    print_msg "${NEW_PROFILE_PATH}/${PROFILE_DEPS_PKGLIST} exists."
-    print_msg "Skipping..."
-  fi
-
-  # create empty install dependency package list
-  if ! file_exists "${NEW_PROFILE_PATH}/${INSTALL_DEPS_PKGLIST}"; then
-    print_always "Create ${INSTALL_DEPS_PKGLIST} for ${NEW_PROFILE_NAME}?"
-    read -r -p "[n/Y]: "
-    if [[ "$REPLY" == "y" ]] || [[ "$REPLY" == "" ]]; then
-      touch "${NEW_PROFILE_PATH}/${INSTALL_DEPS_PKGLIST}"
-    fi
-  else
-    print_msg "${NEW_PROFILE_PATH}/${INSTALL_DEPS_PKGLIST} exists."
-    print_msg "Skipping..."
-  fi
 }

@@ -6,6 +6,7 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/core.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/profiles.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/configs.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/installs.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/setups.sh"
 
 debug() {
   print_always "========================="
@@ -81,21 +82,6 @@ do_list_profile_installs() {
   print_msg "${FUNCNAME[0]}"
 }
 
-do_create_profile() {
-  new_profile "${NAME}"
-}
-do_create_install() {
-  new_install "${PROFILE}"
-}
-do_create_setup() {
-  # create new setup folder
-  # create hook scripts
-  print_msg "${FUNCNAME[0]}"
-}
-do_create_config() {
-  new_config "${NAME}"
-}
-
 # ==============================================================
 # Command
 # ==============================================================
@@ -169,7 +155,7 @@ cmd_new() {
       usage "$COMMAND"
       exit 1
     else
-      do_create_profile
+      new_profile "${NAME}"
     fi
   fi
 
@@ -180,7 +166,7 @@ cmd_new() {
       usage "$COMMAND"
       exit 1
     else
-      do_create_config
+      new_config "${NAME}"
     fi
   fi
 
@@ -191,7 +177,7 @@ cmd_new() {
       usage "$COMMAND"
       exit 1
     else
-      do_create_setup
+      new_setup "${NAME}"
     fi
   fi
 
@@ -202,7 +188,7 @@ cmd_new() {
       usage "$COMMAND"
       exit 1
     else
-      do_create_install
+      new_install "${PROFILE}"
     fi
   fi
 
