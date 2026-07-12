@@ -117,17 +117,17 @@ cmd_list() {
 
   if [ "$SUBCOMMAND" == "config" ]; then
     if [ -z "$PROFILE" ]; then
-      do_list_configs
+      list_configs
     else
-      do_list_profile_configs
+      list_profile_configs "${PROFILE}"
     fi
   fi
 
   if [ "$SUBCOMMAND" == "setup" ]; then
     if [ -z "$PROFILE" ]; then
-      do_list_setups
+      list_setups
     else
-      do_list_profile_setups
+      list_profile_setups "${PROFILE}"
     fi
   fi
 
@@ -138,7 +138,7 @@ cmd_list() {
       usage "$COMMAND"
       exit 1
     else
-      do_list_profile_installs
+      list_profile_installs "${PROFILE}"
     fi
   fi
 }

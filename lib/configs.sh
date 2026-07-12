@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # lib/configs.sh
 
+CONFIG_DIR="${DOTFILES_CONFIG:-${_SCRIPT_DIR}/configs}"
+mapfile -t ALL_CONFIGS < <(ls "${CONFIG_DIR}")
+
 # =========================================================
 # New
 # =========================================================
@@ -11,7 +14,6 @@ new_config() {
     exit 1
   fi
 
-  local CONFIG_DIR="${DOTFILES_CONFIG:-${_SCRIPT_DIR}/configs}"
   local NEW_CONFIG_NAME="${1}"
   local NEW_CONFIG_PATH="${CONFIG_DIR}/${NEW_CONFIG_NAME}"
   local NEW_BASH_PATH="${NEW_CONFIG_PATH}/.config/bash"
@@ -54,6 +56,6 @@ new_config() {
 }
 
 list_configs() {
-  print_always "Not implemented"
-
+  print_always "Available configs:"
+  printf "  %s\n" "${ALL_CONFIGS[@]}"
 }
