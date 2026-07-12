@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-#readonly SCRIPT_DIR="$(cd "$(dirname "${BASHSOUERCE[0]}")" >/dev/null 2>&1 && pwd)"
-
+SETUP_DIR="${DOTFILES_PROFILE_DIR:-${_SCRIPT_DIR}/setups}"
+mapfile -t ALL_SETUPS < <(ls "${SETUP_DIR}")
 # =========================================================
 # New
 # =========================================================
@@ -12,7 +12,6 @@ new_setup() {
     exit 1
   fi
 
-  local SETUP_DIR="${DOTFILES_PROFILE_DIR:-${_SCRIPT_DIR}/setups}"
   local NEW_SETUP_NAME="${1}"
   local NEW_SETUP_PATH="${SETUP_DIR}/${NEW_SETUP_NAME}"
   local NEW_FILES=(
@@ -41,6 +40,6 @@ new_setup() {
 }
 
 list_setups() {
-  print_always "Not implemented"
-
+  print_always "Available setups:"
+  printf "  %s\n" "${ALL_SETUPS[@]}"
 }
