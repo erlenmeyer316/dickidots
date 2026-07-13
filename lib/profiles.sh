@@ -50,3 +50,40 @@ list_profile_setups() {
 list_profile_installs() {
   print_always "Not implemented"
 }
+
+get_profile_dependencies() {
+  if [[ -z $1 ]]; then
+    print_always "Error:${FUNCNAME[0]}}:Missing parameter: No profile given."
+    exit 1
+  fi
+
+  if [[ -z $2 ]]; then
+    print_always "Error:${FUNCNAME[0]}}:Missing parameter: No array given."
+    exit 1
+  fi
+
+  local PROFILE_NAME="${1}"
+  local PROFILE_PATH="${PROFILE_DIR}/${PROFILE_NAME}"
+  local PROFILE_DEPLIST="${NEW_PROFILE_PATH}/profiles.deplist"
+  local -n PROFILE_DEPS=$2
+
+  if ! dir_exists "${PROFILE_PATH}"; then
+    print_always "Error: profile ${PROFILE_NAME} doesn't exist."
+    exit 1
+  fi
+
+  if file_exists "PROFILE_DEPLIST"; then
+    while read -r profile; do
+      local add_dep=1
+      for i in "${PROFILE_DEPS[@]}"; do
+        if [ "$i" == "$profile" ]; then
+          add_dep=0
+        fi
+      done
+      if [ $add_dep -eq 1 ]; then
+        PROFILE_DEPS+=("${profile}")
+        get_profile_dependencies "$profile" PROFILE_DEPS
+      fi
+    done <"$PROFILE_DEPLIST"
+  fi
+}

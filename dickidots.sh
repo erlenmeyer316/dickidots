@@ -23,6 +23,12 @@ debug() {
 # Do
 # ==============================================================
 do_apply() {
+  local profiles
+  get_profile_dependencies "$PROFILE" profiles
+  for profile in "${!profiles[@]}"; do
+    print_always "$profile"
+  done
+
   #setup-pre-apply
   #do_apply_install
   #do_apply_config
@@ -59,22 +65,6 @@ do_remove_install() {
 do_remove_config() {
   #setup-pre-remove-config
   #setup-post-remove-config
-  print_msg "${FUNCNAME[0]}"
-}
-
-do_list_configs() {
-  print_msg "${FUNCNAME[0]}"
-}
-do_list_setups() {
-  print_msg "${FUNCNAME[0]}"
-}
-do_list_profile_configs() {
-  print_msg "${FUNCNAME[0]}"
-}
-do_list_profile_setups() {
-  print_msg "${FUNCNAME[0]}"
-}
-do_list_profile_installs() {
   print_msg "${FUNCNAME[0]}"
 }
 
