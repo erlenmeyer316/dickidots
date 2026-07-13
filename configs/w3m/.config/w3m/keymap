@@ -1,0 +1,187 @@
+A sample of ~/.w3m/keymap (default)
+#
+# Ctrl  : C-, ^
+# Escape: ESC-, M-, ^[
+# Space : SPC, ' '
+# Tab   : TAB, ^i, ^I
+# Delete: DEL, ^?
+# Up    : UP, ^[[A
+# Down  : DOWN, ^[[B
+# Right : RIGHT, ^[[C
+# Left  : LEFT, ^[[D
+
+##############################
+# Clear conflicting defaults #
+##############################
+keymap 	j	NULL
+keymap 	k	NULL
+keymap	h	NULL
+keymap 	l	NULL
+keymap  UP      NULL
+keymap  DOWN    NULL
+keymap  RIGHT   NULL
+keymap  SPC     NULL
+keymap  g       NULL
+keymap  G       NULL
+keymap  TAB     NULL
+keymap  M-TAB   NULL
+keymap 	RET	NULL
+keymap 	o 	NULL
+keymap 	H	NULL
+keymap	L	NULL
+keymap 	r	NULL
+keymap 	t	NULL
+keymap	x	NULL
+keymap	J	NULL
+keymap 	K	NULL
+keymap 	C-t	NULL
+keymap  C-r     NULL
+keymap  C-s     NULL
+keymap  /       NULL
+keymap  ?       NULL
+keymap  N       NULL
+keymap  n       NULL
+keymap 	yy 	NULL
+keymap 	yY      NULL	
+keymap 	yl      NULL	
+keymap  M-l 	NULL 
+keymap  M-L 	NULL 
+keymap  M-w	NULL  
+keymap  M-W  	NULL
+keymap  M-x  	NULL
+keymap  M-X  	NULL
+keymap  v       NULL
+keymap	i	NULL
+keymap 	I	NULL
+keymap	B	NULL
+keymap	M-b	NULL
+keymap  D       NULL
+keymap	M-m	NULL
+keymap 	M-o	NULL
+keymap  M-n     NULL
+keymap	M-o	NULL
+keymap	ZZ	NULL
+keymap  q       NULL
+keymap  C-l     NULL
+
+
+#####################
+# Movement Keybinds #
+#####################
+keymap 	j	MOVE_DOWN
+keymap 	k	MOVE_UP
+keymap	h	MOVE_LEFT
+keymap 	l	MOVE_RIGHT
+
+keymap  UP      MOVE_UP
+keymap  DOWN    MOVE_DOWN
+keymap  RIGHT   MOVE_RIGHT
+keymap  LEFT    MOVE_LEFT
+
+######################
+# Scrolling Keybinds #
+######################
+keymap  SPC     NEXT_PAGE
+keymap  g       BEGIN
+keymap  G       END
+
+###################
+# Link Navigation #
+###################
+keymap  TAB     NEXT_LINK
+keymap  M-TAB   PREV_LINK
+keymap 	RET	GOTO_LINK
+
+#############
+# URL Entry #
+#############
+keymap 	o 	GOTO
+
+######################
+# History Navigation #
+######################
+keymap 	H	BACK
+keymap	L	HISTORY
+
+##########
+# Reload #
+##########
+keymap 	r	RELOAD
+
+########
+# Tabs #
+########
+keymap 	t	NEW_TAB
+keymap	x	CLOSE_TAB
+keymap	J	NEXT_TAB
+keymap 	K	PREV_TAB
+keymap 	C-t	TAB_MENU
+
+##########
+# Search #
+##########
+keymap  C-r     ISEARCH_BACK
+keymap  C-s     ISEARCH
+keymap  /       SEARCH
+keymap  ?       SEARCH_BACK
+keymap  N       SEARCH_PREV
+keymap  n       SEARCH_NEXT
+
+#####################
+# Copy to clipboard #
+#####################
+# requires xclip 
+keymap yy EXTERN "echo -n $W3M_URL | xclip -selection clipboard"
+keymap yY EXTERN "echo -n $W3M_CURRENT_URL | xclip -selection clipboard && notify-send 'w3m' 'URL copied'"
+keymap yl EXTERN_LINK "echo -n %s | xclip -selection clipboard" # yank hovered link
+
+############################
+# Open in external browser #
+############################
+#Uses extbrowser / extbrowser2 / extbrowser3 from config
+#keymap  M-x  EXTERN "$HOME/.config/w3m/open-lynx.sh $W3M_CURRENT_URL"        # alt-l: open current page in lynx
+#keymap  M-X  EXTERN_LINK "$HOME/.config/w3m/open-lynx.sh %s"                 # alt-L: open focused link in lynx
+#keymap  M-z  EXTERN "$HOME/.config/w3m/open-browsh.sh $W3M_CURRENT_URL"      # alt-b: open current page in browsh
+#keymap  M-Z  EXTERN_LINK "$HOME/.config/w3m/open-browsh.sh %s"               # alt-B: open current focused link in browsh
+#keymap  M-x  EXTERN "xdg-open $W3M_CURRENT_URL"                              # alt-x: open in xdg-open (GUI browser)
+#keymap  M-X  EXTERN_LINK "xdg-open %s"                                       # alt-X: open current focused lin in xdg-open
+
+
+###############
+# Source/Info #
+###############
+keymap  v       VIEW
+keymap	i	LINE_INFO
+keymap 	I	INFO
+
+#############
+# Bookmarks #
+#############
+keymap	B	BOOKMARK
+keymap	M-b	ADD_BOOKMARK
+
+#############
+# Downloads #
+#############
+keymap  D       DOWNLOAD_LIST
+
+########
+# Menu #
+########
+keymap	M-m	MENU
+keymap 	M-o	OPTIONS
+
+#########
+# Marks #
+#########
+keymap  M-n     NEXT_MARK
+keymap	M-o	PREV_MARK
+
+########
+# Misc #
+########
+keymap	ZZ	QUIT
+keymap  q       QUIT
+keymap  C-l     REDRAW
+
+

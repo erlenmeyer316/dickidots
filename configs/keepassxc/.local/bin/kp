@@ -1,0 +1,135 @@
+#!/usr/bin/env bash
+# kp — keepassxc-cli wrapper
+# Deps: keepassxc-cli, libsecret-tools, fzf, xclip/xsel
+
+set -euo pipefail
+
+# ── Source shared library ─────────────────────────────────────────────────────
+_KP_CORE="${XDG_CONFIG_HOME:-${HOME}/.config}/kp/kp-core.sh"
+if [[ ! -f "$_KP_CORE" ]]; then
+    echo "kp: core library not found at ${_KP_CORE}" >&2
+    exit 1
+fi
+source "$_KP_CORE"
+
+# ── Commands ──────────────────────────────────────────────────────────────────
+
+cmd_get() {
+    local entry="${1:-$(_kp_pick)}"
+    _kp_field_password "$entry"
+}
+
+cmd_user() {
+    local entry="${1:-$(_kp_pick)}"
+    _kp_field_username "$entry"
+}
+
+cmd_totp() {
+    local entry="${1:-$(_kp_pick)}"
+    _kp_field_totp "$entry"
+}
+
+cmd_url() {
+    local entry="${1:-$(_kp_pick)}"
+    _kp_field_url "$entry"
+}
+
+cmd_show() {
+    # All visible fields, password redacted — safe for terminal display
+    local entry="${1:-$(_kp_pick)}"
+    _kp_cli show "$KP_DB" "$entry"
+}
+
+cmd_clip() {
+    local entry="${1:-$(_kp_pick)}"
+    _kp_clip "$(_kp_field_password "$entry")"
+}
+
+cmd_clip_user() {
+    local entry="${1:-$(_kp_pick)}"
+    _kp_clip "$(_kp_field_username "$entry")"
+}
+
+cmd_clip_totp() {
+    local entry="${1:-$(_kp_pick)}"
+    _kp_clip "$(_kp_field_totp "$entry")"
+}
+
+cmd_unlock() {
+    _kp_get_master >/dev/null && echo "kp: unlocked."
+}
+
+cmd_lock() {
+    if command -v secret-tool >/dev/null 2>&1; then
+        _kp_secret_clear
+        echo "kp: keyring cache cleared."
+    else
+        if command -v keyctl >/dev/null 2>&1; then
+            _kp_kernel_clear
+            echo "kp: keyring cache cleared."
+        else
+            echo "kp: no keyring backend; unset KP_PASS if set manually." >&2
+        fi
+    fi
+}
+
+cmd_debug() {
+    export KP_DEBUG=1
+    _kp_debug_info
+    # Re-run the requested subcommand with debug on, or just show db info
+    local subcmd="${1:-show}"
+    local entry="${2:-}"
+    case "$subcmd" in
+        get)       [[ -n "$entry" ]] && cmd_get  "$entry" ;;
+        user)      [[ -n "$entry" ]] && cmd_user "$entry" ;;
+        totp)      [[ -n "$entry" ]] && cmd_totp "$entry" ;;
+        show)      [[ -n "$entry" ]] && cmd_show "$entry" ;;
+        ls)        _kp_cli ls -R -f "$KP_DB" ;;
+        *)         echo "kp debug: try 'kp debug ls' to test db open" >&2 ;;
+    esac
+}
+
+# ── Usage ─────────────────────────────────────────────────────────────────────
+
+usage() {
+    cat <<EOF
+kp — keepassxc-cli wrapper
+
+Usage: kp <command> [entry]
+
+  get        [entry]   print password to stdout
+  user       [entry]   print username to stdout
+  totp       [entry]   print TOTP code to stdout
+  url        [entry]   print URL to stdout
+  show       [entry]   show all fields (password redacted)
+  clip       [entry]   copy password to clipboard (auto-clears)
+  clip-user  [entry]   copy username to clipboard
+  clip-totp  [entry]   copy TOTP to clipboard
+  unlock               pre-warm keyring cache
+  lock                 evict keyring cache
+  debug      [subcmd]  debug info and optionally run a subcommand with debug on
+  
+
+Omitting [entry] opens an fzf picker.
+
+Config:    \${XDG_CONFIG_HOME:-~/.config}/kp/config
+Overrides: KP_DB, KP_PASS, KP_CLIP_TIMEOUT
+EOF
+}
+
+# ── Dispatch ──────────────────────────────────────────────────────────────────
+
+case "${1:-}" in
+    get)        cmd_get       "${2:-}" ;;
+    user)       cmd_user      "${2:-}" ;;
+    totp)       cmd_totp      "${2:-}" ;;
+    url)        cmd_url       "${2:-}" ;;
+    show)       cmd_show      "${2:-}" ;;
+    clip)       cmd_clip      "${2:-}" ;;
+    clip-user)  cmd_clip_user "${2:-}" ;;
+    clip-totp)  cmd_clip_totp "${2:-}" ;;
+    unlock)     cmd_unlock ;;
+    lock)       cmd_lock ;;
+    debug)      cmd_debug     "${2:-}" "${3:-}" ;;
+    *)          usage ;;
+esac

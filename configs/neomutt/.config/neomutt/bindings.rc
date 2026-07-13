@@ -1,0 +1,111 @@
+# ~/.config/neomutt/bindings.rc
+
+# Must noop 'g' before binding 'g*' sequences
+bind index g noop
+
+# ── Index: navigation ─────────────────────────────────────────────────────────
+bind index j         next-entry
+bind index k         previous-entry
+bind index J         next-unread
+bind index K         previous-unread
+bind index gg         first-entry
+bind index G         last-entry
+bind index l         display-message          # open message (vim-style)
+bind index <Return>  display-message
+
+# ── Index: actions ────────────────────────────────────────────────────────────
+bind index d         delete-message           # mark deleted, no prompt
+bind index u         undelete-message         # unmark if you change your mind
+bind index r         reply
+bind index R         group-reply              # reply all
+bind index f         forward-message
+bind index m         mail                     # new message
+bind index F         flag-message             # flag/star
+bind index N         toggle-new               # toggle read/unread
+bind index za        collapse-thread
+bind index zA        collapse-all
+bind index /         search
+bind index n         search-next
+bind index \$        sync-mailbox             # expunge deleted in current folder
+
+# ── Move / delete ───────────────────────────────────────────────────────────────
+# tag-prefix-cond: if messages are tagged, apply to all tagged;
+# if nothing is tagged, apply to current message only.
+# This means 's' always does what you expect in both cases.
+
+macro index s "<tag-prefix-cond><save-message>" "Move message(s) to folder"
+macro pager s "<tag-prefix-cond><save-message>" "Move message(s) to folder"
+
+
+# ── notmuch search ────────────────────────────────────────────────────────────
+bind index \\ noop                       # free up backslash if used elsewhere
+#macro index S \
+#    "<enter-command>unset wait_key<enter>\
+#<shell-escape>echo -n 'notmuch query: '; read q; echo \$q > /tmp/nm_query<enter>\
+#<change-vfolder>?<enter>" \
+#    "Search all mail via notmuch"
+#
+
+# Cleaner approach — uses neomutt's built-in notmuch prompt:
+bind index \S vfolder-from-query       # Ctrl-s — opens notmuch query prompt
+
+# URL handling
+macro index,pager U \
+    "<pipe-message>urlscan<enter>" \
+    "Extract and follow URLs"
+
+
+# ── Index: account switching ──────────────────────────────────────────────────
+macro index 1 \
+    "<enter-command>source ~/.config/neomutt/accounts/posteo.rc<enter>\
+<change-folder>!<enter>" \
+    "Switch to Posteo"
+
+macro index 2 \
+    "<enter-command>source ~/.config/neomutt/accounts/gmail.rc<enter>\
+<change-folder>!<enter>" \
+    "Switch to Gmail"
+
+# ── Index: sync ───────────────────────────────────────────────────────────────
+macro index gs \
+    "<shell-escape>mbsync -a -c ~/.config/isyncrc<enter>" \
+    "Sync all accounts via mbsync"
+
+# ── Pager: navigation ─────────────────────────────────────────────────────────
+bind pager j         next-line
+bind pager k         previous-line
+bind pager J         next-entry               # next message without going back
+bind pager K         previous-entry
+bind pager g         top                      # top of message
+bind pager G         bottom                   # bottom of message
+bind pager q         exit                     # back to index
+bind pager /         search
+bind pager n         search-next
+bind pager H         display-toggle-weed      # toggle full headers
+bind pager v         view-attachments         # open attachment menu
+
+# ── Pager: actions ────────────────────────────────────────────────────────────
+bind pager r         reply
+bind pager R         group-reply
+bind pager f         forward-message
+bind pager d         delete-message
+bind pager s         save-message
+
+# ── Sidebar ───────────────────────────────────────────────────────────────────
+bind index B         sidebar-toggle-visible   # toggle sidebar
+bind pager B         sidebar-toggle-visible
+bind index [         sidebar-prev             # prev folder
+bind index ]         sidebar-next             # next folder
+bind index \\        sidebar-open             # open highlighted folder
+bind pager [         sidebar-prev
+bind pager ]         sidebar-next
+bind pager \\        sidebar-open
+
+# ── Address book (khard) ──────────────────────────────────────────────────────
+bind editor <Tab>    complete-query           # tab-complete from khard in To: field
+bind editor ^T       complete-query
+
+# ── Attachments ───────────────────────────────────────────────────────────────
+bind attach l        view-mailcap             # open attachment with mailcap rule
+bind attach <Return> view-mailcap
+bind attach q        exit
