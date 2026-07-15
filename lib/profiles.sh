@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-PROFILE_DIR="${DOTFILES_PROFILE_DIR:-${_SCRIPT_DIR}/profiles}"
+PROFILE_DIR="${DOTfiles_PROFILE_DIR:-${_SCRIPT_DIR}/profiles}"
 mapfile -t ALL_PROFILES < <(ls "${PROFILE_DIR}")
 
 # =========================================================
@@ -13,24 +13,24 @@ new_profile() {
     exit 1
   fi
 
-  local NEW_PROFILE_NAME="${1}"
-  local NEW_PROFILE_PATH="${PROFILE_DIR}/${NEW_PROFILE_NAME}"
-  local NEW_FILES=(
-    "${NEW_PROFILE_PATH}/setups.pkglist"
-    "${NEW_PROFILE_PATH}/configs.pkglist"
-    "${NEW_PROFILE_PATH}/profiles.deplist"
-    "${NEW_PROFILE_PATH}/${_DISTRO}-${_VERSION}.binlist"
+  local profile="${1}"
+  local profile_path="${PROFILE_DIR}/${profile}"
+  local files=(
+    "${profile_path}/setups.pkglist"
+    "${profile_path}/configs.pkglist"
+    "${profile_path}/profiles.deplist"
+    "${profile_path}/${_DISTRO}-${_VERSION}.binlist"
   )
 
-  if dir_exists "$NEW_PROFILE_PATH"; then
-    print_always "Error: A profile named ${NEW_PROFILE_PATH} already exists."
+  if dir_exists "$profile_path"; then
+    print_always "Error: A profile named ${profile_path} already exists."
     exit 1
   fi
 
-  dir_create "${NEW_PROFILE_PATH}"
+  dir_create "${profile_path}"
 
-  for file in "${!NEW_FILES[@]}"; do
-    file_create "${NEW_FILES[$file]}"
+  for file in "${!files[@]}"; do
+    file_create "${files[$file]}"
   done
 }
 
@@ -51,7 +51,7 @@ list_profile_installs() {
   print_always "Not implemented"
 }
 
-get_profile_dependencies() {
+resolve_profiles() {
   if [[ -z $1 ]]; then
     print_always "Error:${FUNCNAME[0]}}:Missing parameter: No profile given."
     exit 1
@@ -62,28 +62,29 @@ get_profile_dependencies() {
     exit 1
   fi
 
-  local PROFILE_NAME="${1}"
-  local PROFILE_PATH="${PROFILE_DIR}/${PROFILE_NAME}"
-  local PROFILE_DEPLIST="${NEW_PROFILE_PATH}/profiles.deplist"
-  local -n PROFILE_DEPS=$2
+  local profile="${1}"
+  local profile_path="${PROFILE_DIR}/${profile}"
+  local deplist="${profile_path}/profiles.deplist"
+  local -n resolved_profiles=$2
 
-  if ! dir_exists "${PROFILE_PATH}"; then
-    print_always "Error: profile ${PROFILE_NAME} doesn't exist."
+  if ! dir_exists "${profile_path}"; then
+    print_always "Error: profile ${profile} doesn't exist."
     exit 1
   fi
 
-  if file_exists "PROFILE_DEPLIST"; then
-    while read -r profile; do
-      local add_dep=1
-      for i in "${PROFILE_DEPS[@]}"; do
-        if [ "$i" == "$profile" ]; then
-          add_dep=0
+  if file_exists "${deplist}"; then
+    while IFS= read -r dep; do
+      local dep_added=0
+      for p in "${resolved_profiles[@]}"; do
+        if [[ "$p" == "$dep" ]]; then
+          dep_added=1
+          break
         fi
       done
-      if [ $add_dep -eq 1 ]; then
-        PROFILE_DEPS+=("${profile}")
-        get_profile_dependencies "$profile" PROFILE_DEPS
+      if [[ $dep_added -eq 0 ]]; then
+        resolved_profiles+=("$dep")
+        resolve_profiles "$dep" "$2"
       fi
-    done <"$PROFILE_DEPLIST"
+    done <"${deplist}"
   fi
 }

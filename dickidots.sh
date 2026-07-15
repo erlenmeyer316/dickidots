@@ -23,29 +23,47 @@ debug() {
 # Do
 # ==============================================================
 do_apply() {
-  local profiles
-  get_profile_dependencies "$PROFILE" profiles
-  for profile in "${!profiles[@]}"; do
-    print_always "$profile"
+  local profiles=()
+  local configs=()
+
+  resolve_profiles "$PROFILE" profiles
+  local add=1
+  for p in "${profiles[@]}"; do
+    if [[ "$p" == "$PROFILE" ]]; then
+      add=0
+      break
+    fi
   done
 
-  #setup-pre-apply
-  #do_apply_install
-  #do_apply_config
-  #setup-post-apply
-  print_msg "${FUNCNAME[0]}"
+  if [[ $add -eq 1 ]]; then
+    profiles+=("$PROFILE")
+  fi
+
+  for profile in "${profiles[@]}"; do
+    # call setup pre apply
+    resolve_configs "$profile" configs
+    do_apply_config configs
+
+    do_apply_install "$profile"
+    # call setup post apply
+  done
 }
 
 do_apply_install() {
   #setup-pre-apply-install
   #setup-post-apply-install
-  print_msg "${FUNCNAME[0]}"
+  print_msg "${FUNCNAME[0]} ${1}"
 }
 
 do_apply_config() {
+  print_msg "${FUNCNAME[0]}"
   #setup-pre-apply-config
   #setup-post-apply-config
-  print_msg "${FUNCNAME[0]}"
+  local -n configs=$1
+
+  for c in "${configs[@]}"; do
+    print_msg "Applying ${c}"
+  done
 }
 
 do_remove() {
