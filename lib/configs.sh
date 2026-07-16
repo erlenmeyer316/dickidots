@@ -59,8 +59,3 @@ list_configs() {
   print_always "Available configs:"
   printf "  %s\n" "${ALL_CONFIGS[@]}"
 }
-
-resolve_configs() {
-# recieve array of profiles and empty array for configs  
-# loop through profiles adding new configs from file to array
-}

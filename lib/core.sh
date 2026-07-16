@@ -36,11 +36,12 @@ dir_create() {
   return 1
 }
 
-array_contains_element() {
-  local e match="$1"
+array_contains() {
+  local needle="$1"
   shift
-  for e; do
-    [[ "$e" == "$match" ]] && return 0
+  local x
+  for x in "$@"; do
+    [[ "$x" == "$needle" ]] && return 0
   done
   return 1
 }

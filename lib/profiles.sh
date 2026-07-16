@@ -51,7 +51,7 @@ list_profile_installs() {
   print_always "Not implemented"
 }
 
-resolve_profiles() {
+resolve_profile_dependencies() {
   if [[ -z $1 ]]; then
     print_always "Error:${FUNCNAME[0]}}:Missing parameter: No profile given."
     exit 1
@@ -74,17 +74,78 @@ resolve_profiles() {
 
   if file_exists "${deplist}"; then
     while IFS= read -r dep; do
-      local dep_added=0
-      for p in "${resolved_profiles[@]}"; do
-        if [[ "$p" == "$dep" ]]; then
-          dep_added=1
-          break
-        fi
-      done
-      if [[ $dep_added -eq 0 ]]; then
+      if ! array_contains "$dep" "${resolved_profiles[@]}"; then
         resolved_profiles+=("$dep")
-        resolve_profiles "$dep" "$2"
+        resolve_profile_dependencies "$dep" "$2"
       fi
     done <"${deplist}"
   fi
+}
+
+resolve_config_dependencies() {
+  if [[ -z $1 ]]; then
+    print_always "Error:${FUNCNAME[0]}}:Missing parameter: No profiles given."
+    exit 1
+  fi
+
+  if [[ -z $2 ]]; then
+    print_always "Error:${FUNCNAME[0]}}:Missing parameter: No array given."
+    exit 1
+  fi
+
+  local -n selected_profiles=$1
+  local -n resolved_configs=$2
+
+  for profile in "${!selected_profiles[@]}"; do
+    local profile_path="${PROFILE_DIR}/${selected_profiles[$profile]}"
+    local deplist="${profile_path}/configs.pkglist"
+
+    if ! dir_exists "${profile_path}"; then
+      print_always "Error: profile ${profile} doesn't exist."
+      exit 1
+    fi
+
+    if file_exists "${deplist}"; then
+      while IFS= read -r dep; do
+        if ! array_contains "$dep" "${resolved_configs[@]}"; then
+          resolved_configs+=("$dep")
+          resolve_config_dependencies "$dep" "$2"
+        fi
+      done <"${deplist}"
+    fi
+  done
+}
+
+resolve_setup_dependencies() {
+  if [[ -z $1 ]]; then
+    print_always "Error:${FUNCNAME[0]}}:Missing parameter: No profiles given."
+    exit 1
+  fi
+
+  if [[ -z $2 ]]; then
+    print_always "Error:${FUNCNAME[0]}}:Missing parameter: No array given."
+    exit 1
+  fi
+
+  local -n selected_profiles=$1
+  local -n resolved_setups=$2
+
+  for profile in "${!selected_profiles[@]}"; do
+    local profile_path="${PROFILE_DIR}/${selected_profiles[$profile]}"
+    local deplist="${profile_path}/setups.pkglist"
+
+    if ! dir_exists "${profile_path}"; then
+      print_always "Error: profile ${profile} doesn't exist."
+      exit 1
+    fi
+
+    if file_exists "${deplist}"; then
+      while IFS= read -r dep; do
+        if ! array_contains "$dep" "${resolved_setups[@]}"; then
+          resolved_setups+=("$dep")
+          resolve_setup_dependencies "$dep" "$2"
+        fi
+      done <"${deplist}"
+    fi
+  done
 }
