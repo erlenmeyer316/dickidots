@@ -19,9 +19,7 @@ new_setup() {
     "${NEW_SETUP_PATH}/post-apply.bash"
     "${NEW_SETUP_PATH}/pre-config.bash"
     "${NEW_SETUP_PATH}/post-config.bash"
-    "${NEW_SETUP_PATH}/pre-setup.bash"
     "${NEW_SETUP_PATH}/setup.bash"
-    "${NEW_SETUP_PATH}/post-setup.bash"
     "${NEW_SETUP_PATH}/pre-install.bash"
     "${NEW_SETUP_PATH}/post-install.bash"
   )

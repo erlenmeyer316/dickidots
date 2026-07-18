@@ -109,7 +109,6 @@ resolve_config_dependencies() {
       while IFS= read -r dep; do
         if ! array_contains "$dep" "${resolved_configs[@]}"; then
           resolved_configs+=("$dep")
-          resolve_config_dependencies "$dep" "$2"
         fi
       done <"${deplist}"
     fi
@@ -143,7 +142,39 @@ resolve_setup_dependencies() {
       while IFS= read -r dep; do
         if ! array_contains "$dep" "${resolved_setups[@]}"; then
           resolved_setups+=("$dep")
-          resolve_setup_dependencies "$dep" "$2"
+        fi
+      done <"${deplist}"
+    fi
+  done
+}
+
+resolve_install_dependencies() {
+  if [[ -z $1 ]]; then
+    print_always "Error:${FUNCNAME[0]}}:Missing parameter: No profiles given."
+    exit 1
+  fi
+
+  if [[ -z $2 ]]; then
+    print_always "Error:${FUNCNAME[0]}}:Missing parameter: No array given."
+    exit 1
+  fi
+
+  local -n selected_profiles=$1
+  local -n resolved_installs=$2
+
+  for profile in "${!selected_profiles[@]}"; do
+    local profile_path="${PROFILE_DIR}/${selected_profiles[$profile]}"
+    local deplist="${profile_path}/${_DISTRO}-${_VERSION}.binlist"
+
+    if ! dir_exists "${profile_path}"; then
+      print_always "Error: profile ${profile} doesn't exist."
+      exit 1
+    fi
+
+    if file_exists "${deplist}"; then
+      while IFS= read -r dep; do
+        if ! array_contains "$dep" "${resolved_installs[@]}"; then
+          resolved_installs+=("$dep")
         fi
       done <"${deplist}"
     fi

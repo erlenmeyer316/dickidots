@@ -34,28 +34,77 @@ do_apply() {
   resolve_config_dependencies profiles configs
 
   local setups=()
-  resolve_config_dependencies profiles setups
+  resolve_setup_dependencies profiles setups
 
-  declare -p profiles
-  declare -p configs
-  declare -p setups
+  local installs=()
+  resolve_install_dependencies profiles installs
+
+  print_always "TODO: setup-pre-apply"
+  do_config configs
+  do_install installs
+  do_setup setups
+  print_always "TODO: setup-post-aooly"
 }
 
 do_apply_install() {
-  #setup-pre-apply-install
-  #setup-post-apply-install
-  print_msg "${FUNCNAME[0]}"
+  local profiles=()
+
+  resolve_profile_dependencies "$PROFILE" profiles
+  if ! array_contains "$PROFILE" "${profiles[@]}"; then
+    profiles+=("$PROFILE")
+  fi
+
+  local installs=()
+  resolve_install_dependencies profiles installs
+
+  do_install installs
+}
+do_apply_config() {
+  local profiles=()
+
+  resolve_profile_dependencies "$PROFILE" profiles
+  if ! array_contains "$PROFILE" "${profiles[@]}"; then
+    profiles+=("$PROFILE")
+  fi
+
+  local configs=()
+  resolve_config_dependencies profiles configs
+
+  do_config configs
 }
 
-do_apply_config() {
-  print_msg "${FUNCNAME[0]}"
-  #setup-pre-apply-config
-  #setup-post-apply-config
-  #local -n configs=$1
+do_install() {
+  local -n selected_installs=$1
+  IFS=$'\n' sorted_installs=($(sort <<<"${selected_installs[*]}"))
+  unset IFS
 
-  #for c in "${configs[@]}"; do
-  #  print_msg "Applying ${c}"
-  #done
+  print_always "TODO: setup-pre-install"
+  for i in "${sorted_installs[@]}"; do
+    print_msg "Installing ${i}"
+  done
+  print_always "TODO: setup-post-install"
+}
+
+do_config() {
+  local -n selected_configs=$1
+  IFS=$'\n' sorted_configs=($(sort <<<"${selected_configs[*]}"))
+  unset IFS
+
+  print_always "TODO: setup-pre-config"
+  for c in "${sorted_configs[@]}"; do
+    print_msg "Linking ${c}"
+  done
+  print_always "TODO: setup-post-config"
+}
+
+do_setup() {
+  local -n selected_setups=$1
+  IFS=$'\n' sorted_setups=($(sort <<<"${selected_setups[*]}"))
+  unset IFS
+
+  for s in "${sorted_setups[@]}"; do
+    print_msg "Executing ${s}"
+  done
 }
 
 do_remove() {
