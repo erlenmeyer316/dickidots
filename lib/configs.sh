@@ -2,11 +2,6 @@
 # lib/configs.sh
 
 CONFIG_DIR="${DOTFILES_CONFIG:-${_SCRIPT_DIR}/configs}"
-mapfile -t ALL_CONFIGS < <(ls "${CONFIG_DIR}")
-
-# =========================================================
-# New
-# =========================================================
 
 new_config() {
   if [[ -z $1 ]]; then
@@ -56,6 +51,34 @@ new_config() {
 }
 
 list_configs() {
+  mapfile -t ALL_CONFIGS < <(ls "${CONFIG_DIR}")
   print_always "Available configs:"
   printf "  %s\n" "${ALL_CONFIGS[@]}"
+}
+
+stow_config() {
+  local CONFIG_NAME="${1}"
+  local dry_run=$2
+  local force=$3
+
+  if [[ "$dry_run" -eq 1 ]]; then
+    print_always "[dry-run] stow -d ${CONFIG_PATH} -t ~ -R ${CONFIG_NAME}"
+    return
+  fi
+  if [[ "$force" -eq 1 ]]; then
+    stow --adopt -d "${CONFIG_DIR}" -t ~ -R "${CONFIG_NAME}"
+  else
+    stow -d "${CONFIG_DIR}" -t ~ -R "${CONFIG_NAME}"
+  fi
+}
+
+apply_configs() {}
+
+find_broken_symlinks() {
+  local -n _broken="$1"
+  local search_dir="${2:-$HOME}"
+  local search_depth="$3:-"4"}"
+  while IFS= read -r link; do
+    _broken+=("$link")
+  done < <(find "$search_dir" -maxdepth "$search_depth" -xtype l 2>/dev/null)
 }

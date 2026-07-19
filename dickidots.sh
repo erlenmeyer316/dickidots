@@ -23,6 +23,7 @@ debug() {
 # Do
 # ==============================================================
 do_apply() {
+  debug
   local profiles=()
 
   resolve_profile_dependencies "$PROFILE" profiles
@@ -42,7 +43,6 @@ do_apply() {
   print_always "TODO: setup-pre-apply"
   do_config configs
   do_install installs
-  do_setup setups
   print_always "TODO: setup-post-aooly"
 }
 
@@ -75,36 +75,23 @@ do_apply_config() {
 
 do_install() {
   local -n selected_installs=$1
-  IFS=$'\n' sorted_installs=($(sort <<<"${selected_installs[*]}"))
-  unset IFS
 
   print_always "TODO: setup-pre-install"
-  for i in "${sorted_installs[@]}"; do
-    print_msg "Installing ${i}"
+  for i in "${!selected_installs[@]}"; do
+    print_msg "Installing ${selected_installs[$i]}"
   done
   print_always "TODO: setup-post-install"
 }
 
 do_config() {
   local -n selected_configs=$1
-  IFS=$'\n' sorted_configs=($(sort <<<"${selected_configs[*]}"))
-  unset IFS
 
   print_always "TODO: setup-pre-config"
-  for c in "${sorted_configs[@]}"; do
-    print_msg "Linking ${c}"
+  for c in "${!selected_configs[@]}"; do
+    # apply_config "${selected_configs[$c]}" "${DRY_RUN}" "${FORCE}"
+    apply_config "${selected_configs[$c]}" 1 0
   done
   print_always "TODO: setup-post-config"
-}
-
-do_setup() {
-  local -n selected_setups=$1
-  IFS=$'\n' sorted_setups=($(sort <<<"${selected_setups[*]}"))
-  unset IFS
-
-  for s in "${sorted_setups[@]}"; do
-    print_msg "Executing ${s}"
-  done
 }
 
 do_remove() {
@@ -369,22 +356,22 @@ if [[ "$#" -eq 0 ]]; then
 fi
 
 # parse global flags
-FORCE=false
-QUIET=false
-DRY_RUN=false
+FORCE=0
+QUIET=0
+DRY_RUN=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     -f | --force)
-      FORCE=true
+      FORCE=1
       shift
       ;;
     -q | --quiet)
-      QUIET=true
+      QUIET=1
       shift
       ;;
     -d | --dry-run)
-      DRY_RUN=true
+      DRY_RUN=1
       shift
       ;;
     -h | --help)
