@@ -72,8 +72,6 @@ stow_config() {
   fi
 }
 
-apply_configs() {}
-
 find_broken_symlinks() {
   local -n _broken="$1"
   local search_dir="${2:-$HOME}"

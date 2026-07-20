@@ -23,75 +23,34 @@ debug() {
 # Do
 # ==============================================================
 do_apply() {
-  debug
-  local profiles=()
+  local -n selected_configs=$1
+  local -n selected_installs=$1
 
-  resolve_profile_dependencies "$PROFILE" profiles
-  if ! array_contains "$PROFILE" "${profiles[@]}"; then
-    profiles+=("$PROFILE")
-  fi
+  print_always "TODO>>> run setup-pre-apply scripts for $PROFILE"
+  do_apply_config configs ${DRY_RUN} ${FORCE} ${QUIET}
+  do_apply_install installs ${DRY_RUN} ${FORCE} ${QUIET}
+  print_always "TODO>>> run setup-post-apply scripts for $PROFILE"
 
-  local configs=()
-  resolve_config_dependencies profiles configs
-
-  local setups=()
-  resolve_setup_dependencies profiles setups
-
-  local installs=()
-  resolve_install_dependencies profiles installs
-
-  print_always "TODO: setup-pre-apply"
-  do_config configs
-  do_install installs
-  print_always "TODO: setup-post-aooly"
 }
 
 do_apply_install() {
-  local profiles=()
-
-  resolve_profile_dependencies "$PROFILE" profiles
-  if ! array_contains "$PROFILE" "${profiles[@]}"; then
-    profiles+=("$PROFILE")
-  fi
-
-  local installs=()
-  resolve_install_dependencies profiles installs
-
-  do_install installs
-}
-do_apply_config() {
-  local profiles=()
-
-  resolve_profile_dependencies "$PROFILE" profiles
-  if ! array_contains "$PROFILE" "${profiles[@]}"; then
-    profiles+=("$PROFILE")
-  fi
-
-  local configs=()
-  resolve_config_dependencies profiles configs
-
-  do_config configs
-}
-
-do_install() {
   local -n selected_installs=$1
 
-  print_always "TODO: setup-pre-install"
+  print_always "TODO>>> ${FUNCNAME[0]}: run setup-pre-install scripts for $PROFILE"
   for i in "${!selected_installs[@]}"; do
-    print_msg "Installing ${selected_installs[$i]}"
+    print_msg "Installing package: ${selected_installs[$i]}"
   done
-  print_always "TODO: setup-post-install"
+  print_always "TODO>>> ${FUNCNAME[0]}: run setup-pre-install scripts for $PROFILE"
 }
 
-do_config() {
+do_apply_config() {
   local -n selected_configs=$1
 
-  print_always "TODO: setup-pre-config"
+  print_always "TODO>>> ${FUNCNAME[0]}: run setup-pre-config scripts for $PROFILE"
   for c in "${!selected_configs[@]}"; do
-    # apply_config "${selected_configs[$c]}" "${DRY_RUN}" "${FORCE}"
-    apply_config "${selected_configs[$c]}" 1 0
+    print_always "Applying config: ${selected_configs[$c]}"
   done
-  print_always "TODO: setup-post-config"
+  print_always "TODO>>> ${FUNCNAME[0]}: run setup-post-config scripts for $PROFILE"
 }
 
 do_remove() {
@@ -120,15 +79,24 @@ do_remove_config() {
 
 cmd_apply() {
   if [[ -z "$SUBCOMMAND" ]]; then
-    do_apply
+    local configs=()
+    local installs=()
+    resolve_profile_configs "$PROFILE" configs
+    resolve_profile_installs "$PROFILE" installs
+
+    do_apply configs installs
   fi
 
   if [ "$SUBCOMMAND" == "install" ]; then
-    do_apply_install
+    local installs=()
+    resolve_profile_installs "$PROFILE" installs
+    do_apply_install installs
   fi
 
   if [ "$SUBCOMMAND" == "config" ]; then
-    do_apply_config
+    local configs=()
+    resolve_profile_configs "$PROFILE" configs
+    do_apply_config configs
   fi
 }
 

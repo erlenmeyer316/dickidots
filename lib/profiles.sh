@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 PROFILE_DIR="${DOTfiles_PROFILE_DIR:-${_SCRIPT_DIR}/profiles}"
-mapfile -t ALL_PROFILES < <(ls "${PROFILE_DIR}")
 
 # =========================================================
 # New
@@ -35,6 +34,7 @@ new_profile() {
 }
 
 list_profiles() {
+  mapfile -t ALL_PROFILES < <(ls "${PROFILE_DIR}")
   print_always "Available profiles:"
   printf "  %s\n" "${ALL_PROFILES[@]}"
 }
@@ -51,7 +51,7 @@ list_profile_installs() {
   print_always "Not implemented"
 }
 
-resolve_profile_dependencies() {
+resolve_profiles() {
   if [[ -z $1 ]]; then
     print_always "Error:${FUNCNAME[0]}}:Missing parameter: No profile given."
     exit 1
@@ -65,7 +65,7 @@ resolve_profile_dependencies() {
   local profile="${1}"
   local profile_path="${PROFILE_DIR}/${profile}"
   local deplist="${profile_path}/profiles.deplist"
-  local -n resolved_profiles=$2
+  local -n array_out=$2
 
   if ! dir_exists "${profile_path}"; then
     print_always "Error: profile ${profile} doesn't exist."
@@ -74,17 +74,21 @@ resolve_profile_dependencies() {
 
   if file_exists "${deplist}"; then
     while IFS= read -r dep; do
-      if ! array_contains "$dep" "${resolved_profiles[@]}"; then
-        resolved_profiles+=("$dep")
-        resolve_profile_dependencies "$dep" "$2"
+      if ! array_contains "$dep" "${array_out[@]}"; then
+        array_out+=("$dep")
+        resolve_profiles "$dep" "$2"
       fi
     done <"${deplist}"
   fi
+
+  if ! array_contains "$profile" "${array_out[@]}"; then
+    array_out+=("$profile")
+  fi
 }
 
-resolve_config_dependencies() {
+resolve_profile_configs() {
   if [[ -z $1 ]]; then
-    print_always "Error:${FUNCNAME[0]}}:Missing parameter: No profiles given."
+    print_always "Error:${FUNCNAME[0]}}:Missing parameter: No profile given."
     exit 1
   fi
 
@@ -93,11 +97,13 @@ resolve_config_dependencies() {
     exit 1
   fi
 
-  local -n selected_profiles=$1
-  local -n resolved_configs=$2
+  local profile="${1}"
+  local -n array_out=$2
+  local resolved_profiles=()
 
-  for profile in "${!selected_profiles[@]}"; do
-    local profile_path="${PROFILE_DIR}/${selected_profiles[$profile]}"
+  resolve_profiles "$profile" resolved_profiles
+  for profile in "${!resolved_profiles[@]}"; do
+    local profile_path="${PROFILE_DIR}/${resolved_profiles[$profile]}"
     local deplist="${profile_path}/configs.pkglist"
 
     if ! dir_exists "${profile_path}"; then
@@ -107,15 +113,15 @@ resolve_config_dependencies() {
 
     if file_exists "${deplist}"; then
       while IFS= read -r dep; do
-        if ! array_contains "$dep" "${resolved_configs[@]}"; then
-          resolved_configs+=("$dep")
+        if ! array_contains "$dep" "${array_out[@]}"; then
+          array_out+=("$dep")
         fi
       done <"${deplist}"
     fi
   done
 }
 
-resolve_setup_dependencies() {
+resolve_profile_setups() {
   if [[ -z $1 ]]; then
     print_always "Error:${FUNCNAME[0]}}:Missing parameter: No profiles given."
     exit 1
@@ -148,9 +154,9 @@ resolve_setup_dependencies() {
   done
 }
 
-resolve_install_dependencies() {
+resolve_profile_installs() {
   if [[ -z $1 ]]; then
-    print_always "Error:${FUNCNAME[0]}}:Missing parameter: No profiles given."
+    print_always "Error:${FUNCNAME[0]}}:Missing parameter: No profile given."
     exit 1
   fi
 
@@ -159,22 +165,23 @@ resolve_install_dependencies() {
     exit 1
   fi
 
-  local -n selected_profiles=$1
-  local -n resolved_installs=$2
+  local profile="${1}"
+  local -n array_out=$2
+  local resolved_profiles=()
 
-  for profile in "${!selected_profiles[@]}"; do
-    local profile_path="${PROFILE_DIR}/${selected_profiles[$profile]}"
+  resolve_profiles "$profile" resolved_profiles
+  for profile in "${!resolved_profiles[@]}"; do
+    local profile_path="${PROFILE_DIR}/${resolved_profiles[$profile]}"
     local deplist="${profile_path}/${_DISTRO}-${_VERSION}.binlist"
 
     if ! dir_exists "${profile_path}"; then
       print_always "Error: profile ${profile} doesn't exist."
       exit 1
     fi
-
     if file_exists "${deplist}"; then
       while IFS= read -r dep; do
-        if ! array_contains "$dep" "${resolved_installs[@]}"; then
-          resolved_installs+=("$dep")
+        if ! array_contains "$dep" "${array_out[@]}"; then
+          array_out+=("$dep")
         fi
       done <"${deplist}"
     fi
