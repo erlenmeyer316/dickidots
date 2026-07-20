@@ -72,11 +72,15 @@ stow_config() {
   fi
 }
 
-find_broken_symlinks() {
-  local -n _broken="$1"
-  local search_dir="${2:-$HOME}"
-  local search_depth="$3:-"4"}"
-  while IFS= read -r link; do
-    _broken+=("$link")
-  done < <(find "$search_dir" -maxdepth "$search_depth" -xtype l 2>/dev/null)
+apply_configs() {
+  local -n configs_in=$1
+  local dry_run=$2
+  local force=$3
+  local quiet=$4
+
+  for c in "${!configs_in[@]}"; do
+    if [[ $dry_run -eq 1 ]]; then
+      print_always "applying config ${configs_in[$c]}"
+    fi
+  done
 }

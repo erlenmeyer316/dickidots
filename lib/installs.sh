@@ -22,3 +22,16 @@ new_install() {
 
   file_create "${NEW_INSTALL_FILE}"
 }
+
+apply_installs() {
+  local -n installs_in=$1
+  local dry_run=$2
+  local force=$3
+  local quiet=$4
+
+  for i in "${!installs_in[@]}"; do
+    if [[ $dry_run -eq 1 ]]; then
+      print_always "applying install ${installs_in[$i]}"
+    fi
+  done
+}

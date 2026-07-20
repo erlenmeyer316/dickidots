@@ -37,20 +37,16 @@ do_apply_install() {
   local -n selected_installs=$1
 
   print_always "TODO>>> ${FUNCNAME[0]}: run setup-pre-install scripts for $PROFILE"
-  for i in "${!selected_installs[@]}"; do
-    print_msg "Installing package: ${selected_installs[$i]}"
-  done
+  apply_installs selected_installs $DRY_RUN $FORCE $QUIET
   print_always "TODO>>> ${FUNCNAME[0]}: run setup-pre-install scripts for $PROFILE"
 }
 
 do_apply_config() {
   local -n selected_configs=$1
 
-  print_always "TODO>>> ${FUNCNAME[0]}: run setup-pre-config scripts for $PROFILE"
-  for c in "${!selected_configs[@]}"; do
-    print_always "Applying config: ${selected_configs[$c]}"
-  done
-  print_always "TODO>>> ${FUNCNAME[0]}: run setup-post-config scripts for $PROFILE"
+  print_always "TODO>>> run setup-pre-config scripts for $PROFILE"
+  apply_configs selected_configs $DRY_RUN $FORCE $QUIET
+  print_always "TODO>>> run setup-post-config scripts for $PROFILE"
 }
 
 do_remove() {
