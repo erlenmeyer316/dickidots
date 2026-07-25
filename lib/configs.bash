@@ -72,6 +72,23 @@ stow_config() {
   fi
 }
 
+unstow_config() {
+  local CONFIG_NAME="${1}"
+  local dry_run=$2
+  local force=$3
+
+  if [[ "$dry_run" -eq 1 ]]; then
+    print_always "[dry-run] stow -d ${CONFIG_PATH} -t ~ -R ${CONFIG_NAME}"
+    return
+  fi
+  if [[ "$force" -eq 1 ]]; then
+    stow --adopt -d "${CONFIG_DIR}" -t ~ -R "${CONFIG_NAME}"
+  else
+    stow -d "${CONFIG_DIR}" -t ~ -R "${CONFIG_NAME}"
+  fi
+
+}
+
 apply_configs() {
   local -n configs_in=$1
   local dry_run=$2
@@ -89,6 +106,29 @@ apply_configs() {
         stow --adopt -d "${CONFIG_DIR}" -t ~ -R "${CONFIG_NAME}"
       else
         stow -d "${CONFIG_DIR}" -t ~ -R "${CONFIG_NAME}"
+      fi
+    fi
+
+  done
+}
+
+remove_configs() {
+  local -n configs_in=$1
+  local dry_run=$2
+  local force=$3
+  local quiet=$4
+
+  for c in "${!configs_in[@]}"; do
+    local CONFIG_NAME="${configs_in[$c]}"
+    local CONFIG_PATH="${CONFIG_DIR}/${CONFIG_NAME}"
+    if [[ $dry_run -eq 1 ]]; then
+      print_always "[dry-run] stow -d ${CONFIG_PATH} -t ~ -D ${CONFIG_NAME}"
+    else
+      print_msg "[config]: applying ${configs_in[$c]}"
+      if [[ "$force" -eq 1 ]]; then
+        stow --adopt -d "${CONFIG_DIR}" -t ~ -D "${CONFIG_NAME}"
+      else
+        stow -d "${CONFIG_DIR}" -t ~ -D "${CONFIG_NAME}"
       fi
     fi
 

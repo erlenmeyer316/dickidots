@@ -62,7 +62,7 @@ do_remove_install() {
   local -n selected_installs=$1
 
   print_always "TODO>>> run setup-pre-remove-install scripts for $PROFILE"
-  apply_installs selected_installs $DRY_RUN $FORCE $QUIET
+  remove_installs selected_installs $DRY_RUN $FORCE $QUIET
   print_always "TODO>>> run setup-pre-remove-install scripts for $PROFILE"
 }
 
@@ -70,8 +70,8 @@ do_remove_config() {
   local -n selected_configs=$1
 
   print_always "TODO>>> run setup-pre-remove-config scripts for $PROFILE"
-  apply_configs selected_configs $DRY_RUN $FORCE $QUIET
-  print_always "TODO>>> run setup-post-config scripts for $PROFILE"
+  remove_configs selected_configs $DRY_RUN $FORCE $QUIET
+  print_always "TODO>>> run setup-post-remove-config scripts for $PROFILE"
 }
 
 # ==============================================================
