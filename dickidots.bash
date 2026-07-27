@@ -2,125 +2,69 @@
 
 shopt -s nullglob
 
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/core.sh"
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/profiles.sh"
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/configs.sh"
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/installs.sh"
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/setups.sh"
-
-debug() {
-  print_always "========================="
-  print_always "| Command:    $COMMAND"
-  print_always "| Subcommand: $SUBCOMMAND"
-  print_always "| Profile:    $PROFILE"
-  print_always "| Name:       $NAME"
-  print_always "| Force:      $FORCE"
-  print_always "| Quiet:      $QUIET"
-  print_always "| Dry Run:    $DRY_RUN"
-  print_always "===================="
-}
-# ==============================================================
-# Do
-# ==============================================================
-do_apply() {
-  local -n do_apply_configs=$1
-  local -n do_apply_installs=$2
-
-  print_always "TODO>>> run setup-pre-apply scripts for $PROFILE"
-  do_apply_config do_apply_configs ${DRY_RUN} ${FORCE} ${QUIET}
-  do_apply_install do_apply_installs ${DRY_RUN} ${FORCE} ${QUIET}
-  print_always "TODO>>> run setup-post-apply scripts for $PROFILE"
-}
-
-do_apply_install() {
-  local -n do_apply_install_installs=$1
-
-  print_always "TODO>>> run setup-pre-install scripts for $PROFILE"
-  apply_installs do_apply_install_installs $DRY_RUN $FORCE $QUIET
-  print_always "TODO>>> run setup-pre-install scripts for $PROFILE"
-}
-
-do_apply_config() {
-  local -n do_apply_config_configs=$1
-
-  print_always "TODO>>> run setup-pre-config scripts for $PROFILE"
-  apply_configs do_apply_config_configs $DRY_RUN $FORCE $QUIET
-  print_always "TODO>>> run setup-post-config scripts for $PROFILE"
-}
-
-do_remove() {
-  local -n selected_configs=$1
-  local -n selected_installs=$1
-
-  print_always "TODO>>> run setup-pre-remove scripts for $PROFILE"
-  do_remove_configs ${DRY_RUN} ${FORCE} ${QUIET}
-  do_remove_installs installs ${DRY_RUN} ${FORCE} ${QUIET}
-  print_always "TODO>>> run setup-post-remove scripts for $PROFILE"
-}
-
-do_remove_install() {
-  local -n selected_installs=$1
-
-  print_always "TODO>>> run setup-pre-remove-install scripts for $PROFILE"
-  remove_installs selected_installs $DRY_RUN $FORCE $QUIET
-  print_always "TODO>>> run setup-pre-remove-install scripts for $PROFILE"
-}
-
-do_remove_config() {
-  local -n selected_configs=$1
-
-  print_always "TODO>>> run setup-pre-remove-config scripts for $PROFILE"
-  remove_configs selected_configs $DRY_RUN $FORCE $QUIET
-  print_always "TODO>>> run setup-post-remove-config scripts for $PROFILE"
-}
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/core.bash"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/profiles.bash"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/configs.bash"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/installs.bash"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/setups.bash"
 
 # ==============================================================
 # Command
 # ==============================================================
 
 cmd_apply() {
-  if [[ -z "$SUBCOMMAND" ]]; then
-    local cmd_configs=()
-    local cmd_installs=()
-    resolve_profile_configs "$PROFILE" cmd_configs
-    resolve_profile_installs "$PROFILE" cmd_installs
+  local cmd_configs=()
+  local cmd_installs=()
+  local cmd_setups=()
+  resolve_profile_configs "$PROFILE" cmd_configs
+  resolve_profile_installs "$PROFILE" cmd_installs
+  resolve_profile_setups "$PROFILE" cmd_setups
 
-    do_apply cmd_configs cmd_installs
+  if [[ -z "$SUBCOMMAND" ]]; then
+    execute_pre_apply cmd_setups
+    do_apply_config cmd_configs cmd_setups
+    do_apply_install cmd_installs cmd_setups
+    execute_post_apply cmd_setups
   fi
 
   if [ "$SUBCOMMAND" == "install" ]; then
-    local cmd_installs=()
-    resolve_profile_installs "$PROFILE" cmd_installs
-    do_apply_install cmd_installs
+    execute_pre_install cmd_setups
+    apply_installs cmd_installs $DRY_RUN $FORCE $QUIET
+    execute_post_install cmd_setups
   fi
 
   if [ "$SUBCOMMAND" == "config" ]; then
-    local cmd_configs=()
-    resolve_profile_configs "$PROFILE" cmd_configs
-    do_apply_config cmd_configs
+    execute_pre_config cmd_setups
+    apply_configs cmd_setups $DRY_RUN $FORCE $QUIET
+    execute_post_config cmd_setups
   fi
 }
 
 cmd_remove() {
-  if [[ -z "$SUBCOMMAND" ]]; then
-    local configs=()
-    local installs=()
-    resolve_profile_configs "$PROFILE" configs
-    resolve_profile_installs "$PROFILE" installs
+  local cmd_configs=()
+  local cmd_installs=()
+  local cmd_setups=()
+  resolve_profile_configs "$PROFILE" cmd_configs
+  resolve_profile_installs "$PROFILE" cmd_installs
+  resolve_profile_setups "$PROFILE" cmd_setups
 
-    do_remove configs installs
+  if [[ -z "$SUBCOMMAND" ]]; then
+    execute_pre_remove cmd_setups
+    do_remove_configs cmd_configs
+    do_remove_installs cmd_installs
+    execute_post_remove cmd_setups
   fi
 
   if [ "$SUBCOMMAND" == "install" ]; then
-    local installs=()
-    resolve_profile_installs "$PROFILE" installs
-    do_remove installs
+    execute_pre_remove_install cmd_setups
+    remove_installsi cmd_installs $DRY_RUN $FORCE $QUIET
+    execute_post_remove_install cmd_setups
   fi
 
   if [ "$SUBCOMMAND" == "config" ]; then
-    local configs=()
-    resolve_profile_configs "$PROFILE" configs
-    do_remove configs
+    execute_pre_remove_config cmd_setups
+    remove_configs cmd_configs $DRY_RUN $FORCE $QUIET
+    execute_post_remove_config cmd_setups
   fi
 }
 

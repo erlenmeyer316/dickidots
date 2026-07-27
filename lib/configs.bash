@@ -56,39 +56,6 @@ list_configs() {
   printf "  %s\n" "${ALL_CONFIGS[@]}"
 }
 
-stow_config() {
-  local CONFIG_NAME="${1}"
-  local dry_run=$2
-  local force=$3
-
-  if [[ "$dry_run" -eq 1 ]]; then
-    print_always "[dry-run] stow -d ${CONFIG_PATH} -t ~ -R ${CONFIG_NAME}"
-    return
-  fi
-  if [[ "$force" -eq 1 ]]; then
-    stow --adopt -d "${CONFIG_DIR}" -t ~ -R "${CONFIG_NAME}"
-  else
-    stow -d "${CONFIG_DIR}" -t ~ -R "${CONFIG_NAME}"
-  fi
-}
-
-unstow_config() {
-  local CONFIG_NAME="${1}"
-  local dry_run=$2
-  local force=$3
-
-  if [[ "$dry_run" -eq 1 ]]; then
-    print_always "[dry-run] stow -d ${CONFIG_PATH} -t ~ -R ${CONFIG_NAME}"
-    return
-  fi
-  if [[ "$force" -eq 1 ]]; then
-    stow --adopt -d "${CONFIG_DIR}" -t ~ -R "${CONFIG_NAME}"
-  else
-    stow -d "${CONFIG_DIR}" -t ~ -R "${CONFIG_NAME}"
-  fi
-
-}
-
 apply_configs() {
   local -n configs_in=$1
   local dry_run=$2
@@ -99,9 +66,9 @@ apply_configs() {
     local CONFIG_NAME="${configs_in[$c]}"
     local CONFIG_PATH="${CONFIG_DIR}/${CONFIG_NAME}"
     if [[ $dry_run -eq 1 ]]; then
-      print_always "[dry-run] stow -d ${CONFIG_PATH} -t ~ -R ${CONFIG_NAME}"
+      print_always "[dry-run] applying config ${CONFIG_NAME}"
     else
-      print_msg "[config]: applying ${configs_in[$c]}"
+      print_msg "[config]: applying ${configs_in[$c]}" "$quiet"
       if [[ "$force" -eq 1 ]]; then
         stow --adopt -d "${CONFIG_DIR}" -t ~ -R "${CONFIG_NAME}"
       else
@@ -124,7 +91,7 @@ remove_configs() {
     if [[ $dry_run -eq 1 ]]; then
       print_always "[dry-run] stow -d ${CONFIG_PATH} -t ~ -D ${CONFIG_NAME}"
     else
-      print_msg "[config]: applying ${configs_in[$c]}"
+      print_msg "[config]: applying ${configs_in[$c]}" "$quiet"
       if [[ "$force" -eq 1 ]]; then
         stow --adopt -d "${CONFIG_DIR}" -t ~ -D "${CONFIG_NAME}"
       else

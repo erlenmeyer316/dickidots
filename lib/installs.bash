@@ -34,7 +34,7 @@ apply_installs() {
 
   for driver in "${_SCRIPT_DIR}"/lib/drivers/*; do
     source "$driver"
-    install sorted $dry_run $force $quiet
+    install sorted "$dry_run" "$force" "$quiet"
   done
 }
 
@@ -49,19 +49,22 @@ remove_installs() {
 
   for driver in "${_SCRIPT_DIR}"/lib/drivers/*; do
     source "$driver"
-    uninstall sorted $dry_run $force $quiet
+    uninstall sorted "$dry_run" "$force" "$quiet"
   done
 }
 
 install() {
   local -n pkglist=$1
+  local dry_run=$2
+  local force=$3
+  local quiet=$4
 
   if [[ ${#pkglist[@]} -eq 0 ]]; then
-    print_msg "[$pm] Nothing to install."
+    print_msg "[install][$pm] Nothing to install." "$quiet"
     return 0
   fi
 
-  print_msg "[$pm] Refreshing package index..."
+  print_msg "[$pm] Refreshing package index..." "$quiet"
   pkg_update_repos
 
   for pkg in "${pkglist[@]}"; do
@@ -81,19 +84,19 @@ install() {
     [[ ${#available[@]} -eq 0 ]] && continue
 
     local to_install=()
-    for pkg in "${available[@]}"; do
-      if ! pkg_is_installed "$pkg"; then
-        print_msg "  [${pm}] Queuing ${pkg}"
-        to_install+=("$pkg")
+    for avl in "${available[@]}"; do
+      if ! pkg_is_installed "$avl"; then
+        print_msg "  [${pm}] Queuing ${avl}" "$quiet"
+        to_install+=("$avl")
       fi
     done
 
     if [[ ${#to_install[@]} -eq 0 ]]; then
-      print_msg "[${pm}] All packages already installed."
+      print_msg "[${pm}] All packages already installed." "$quiet"
       continue
     fi
 
-    print_msg "[${pm}] Installing: ${to_install[*]}"
+    print_msg "[${pm}] Installing: ${to_install[*]}" "$quiet"
     pkg_install "${to_install[@]}"
   done
 
@@ -101,9 +104,12 @@ install() {
 
 remove() {
   local -n pkglist=$1
+  local dry_run=$2
+  local force=$3
+  local quiet=$4
 
   if [[ ${#pkglist[@]} -eq 0 ]]; then
-    print_msg "[$pm] Nothing to remove."
+    print_msg "[install][$pm] Nothing to remove." "$quiet"
     return 0
   fi
 
@@ -115,8 +121,14 @@ remove() {
       continue
     fi
 
-    print_msg "[${pm}] Uninstalling: ${okglist[*]}"
-    pkg_remove "${okglist[@]}"
+    local to_remove=()
+    if ! pkg_is_installed "$pkg"; then
+      print_msg "  [${pm}] Queuing ${pkg}" "$quiet"
+      to_remove+=("$pkg")
+    fi
+
+    print_msg "[${pm}] Removing: ${to_remove[*]}" "$quiet"
+    pkg_install "${to_remove[@]}"
   done
 
 }

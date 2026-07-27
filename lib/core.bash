@@ -10,7 +10,7 @@ file_exists() { [[ -f "$1" ]]; }
 
 dir_exists() { [[ -d "$1" ]]; }
 
-print_msg() { [[ "$QUIET" -eq 0 ]] && printf "%s\n" "$1"; }
+print_msg() { [[ "${2}" -eq 0 ]] && printf "%s\n" "$1"; }
 
 print_always() { printf "%s\n" "$1"; }
 
@@ -84,8 +84,3 @@ if [ "$_OS" = "Linux" ]; then
     _VERSION=$(uname -r)
   fi
 fi
-
-readonly _LIB_DIR="${_SCRIPT_DIR}/lib"
-readonly _PROFILE_DIR="${DOTFILES_PROFILE_DIR:-${_SCRIPT_DIR}/profiles}"
-readonly _CONFIG_DIR="${DOTFILES_CONFIG_DIR:-${_SCRIPT_DIR}/configs}"
-readonly _SETUP_DIR="${DOTFILES_SETUP_DIR:-${_SCRIPT_DIR}/setups}"
