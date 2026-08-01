@@ -65,40 +65,43 @@ install() {
   fi
 
   print_msg "[$pm] Refreshing package index..." "$quiet"
-  pkg_update_repos
+  if [ ! $dry_run ]; then
+    pkg_update_repos
+  fi
+
+  local available=()
+  local to_install=()
 
   for pkg in "${pkglist[@]}"; do
     IFS=: read -r key bin <<<"$pkg"
     unset IFS
 
     if [ "$key" != "$pm" ]; then
+      print_msg "not valid package" "$quiet"
       continue
     fi
 
-    local available=()
     if pkg_exists "$bin"; then
       available+=("$bin")
     else
       print_always "Warning: [${pm}] '${bin}' not found in repository — skipping."
     fi
-    [[ ${#available[@]} -eq 0 ]] && continue
-
-    local to_install=()
-    for avl in "${available[@]}"; do
-      if ! pkg_is_installed "$avl"; then
-        print_msg "  [${pm}] Queuing ${avl}" "$quiet"
-        to_install+=("$avl")
-      fi
-    done
-
-    if [[ ${#to_install[@]} -eq 0 ]]; then
-      print_msg "[${pm}] All packages already installed." "$quiet"
-      continue
-    fi
-
-    print_msg "[${pm}] Installing: ${to_install[*]}" "$quiet"
-    pkg_install "${to_install[@]}"
   done
+
+  for avl in "${available[@]}"; do
+    if ! pkg_is_installed "$avl"; then
+      print_msg "[${pm}] Marking ${avl} for install" "$quiet"
+      to_install+=("$avl")
+    else
+      print_msg "[${pm}] ${avl} already installed" "$quiet"
+    fi
+  done
+
+  print_msg "[${pm}] Installing: ${to_install[*]}" "$quiet"
+
+  if [ ! $dry_run ]; then
+    pkg_install "${to_install[@]}"
+  fi
 
 }
 

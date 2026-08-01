@@ -8,10 +8,6 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/configs.bash"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/installs.bash"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/setups.bash"
 
-# ==============================================================
-# Command
-# ==============================================================
-
 cmd_apply() {
   local cmd_configs=()
   local cmd_installs=()
@@ -22,21 +18,30 @@ cmd_apply() {
 
   if [[ -z "$SUBCOMMAND" ]]; then
     execute_pre_apply cmd_setups
-    do_apply_config cmd_configs cmd_setups
-    do_apply_install cmd_installs cmd_setups
+
+    execute_pre_install cmd_setups $DRY_RUN $FORCE $QUIET
+    apply_installs cmd_installs $DRY_RUN $FORCE $QUIET
+    execute_post_install cmd_setups $DRY_RUN $FORCE $QUIET
+
+    execute_pre_config cmd_setups $DRY_RUN $FORCE $QUIET
+    apply_configs cmd_configs $DRY_RUN $FORCE $QUIET
+    execute_post_config cmd_setups $DRY_RUN $FORCE $QUIET
+
     execute_post_apply cmd_setups
   fi
 
   if [ "$SUBCOMMAND" == "install" ]; then
-    execute_pre_install cmd_setups
+    execute_pre_install cmd_setups $DRY_RUN $FORCE $QUIET
     apply_installs cmd_installs $DRY_RUN $FORCE $QUIET
-    execute_post_install cmd_setups
+    execute_post_install cmd_setups $DRY_RUN $FORCE $QUIET
+
   fi
 
   if [ "$SUBCOMMAND" == "config" ]; then
-    execute_pre_config cmd_setups
-    apply_configs cmd_setups $DRY_RUN $FORCE $QUIET
-    execute_post_config cmd_setups
+    execute_pre_config cmd_setups $DRY_RUN $FORCE $QUIET
+    apply_configs cmd_configs $DRY_RUN $FORCE $QUIET
+    execute_post_config cmd_setups $DRY_RUN $FORCE $QUIET
+
   fi
 }
 
@@ -49,22 +54,25 @@ cmd_remove() {
   resolve_profile_setups "$PROFILE" cmd_setups
 
   if [[ -z "$SUBCOMMAND" ]]; then
-    execute_pre_remove cmd_setups
-    do_remove_configs cmd_configs
-    do_remove_installs cmd_installs
-    execute_post_remove cmd_setups
+    execute_pre_remove cmd_setups $DRY_RUN $FORCE $QUIET
+    do_remove_configs cmd_configs $DRY_RUN $FORCE $QUIET
+    do_remove_installs cmd_installs $DRY_RUN $FORCE $QUIET
+    execute_post_remove cmd_setups $DRY_RUN $FORCE $QUIET
+
   fi
 
   if [ "$SUBCOMMAND" == "install" ]; then
-    execute_pre_remove_install cmd_setups
+    execute_pre_remove_install cmd_setups $DRY_RUN $FORCE $QUIET
     remove_installsi cmd_installs $DRY_RUN $FORCE $QUIET
-    execute_post_remove_install cmd_setups
+    execute_post_remove_install cmd_setups $DRY_RUN $FORCE $QUIET
+
   fi
 
   if [ "$SUBCOMMAND" == "config" ]; then
-    execute_pre_remove_config cmd_setups
+    execute_pre_remove_config cmd_setups $DRY_RUN $FORCE $QUIET
     remove_configs cmd_configs $DRY_RUN $FORCE $QUIET
-    execute_post_remove_config cmd_setups
+    execute_post_remove_config cmd_setups $DRY_RUN $FORCE $QUIET
+
   fi
 }
 
@@ -109,7 +117,7 @@ cmd_new() {
       usage "$COMMAND"
       exit 1
     else
-      new_profile "${NAME}"
+      new_profile "${NAME}" $DRY_RUN $FORCE $QUIET
     fi
   fi
 
@@ -120,7 +128,7 @@ cmd_new() {
       usage "$COMMAND"
       exit 1
     else
-      new_config "${NAME}"
+      new_config "${NAME}" $DRY_RUN $FORCE $QUIET
     fi
   fi
 
@@ -131,7 +139,7 @@ cmd_new() {
       usage "$COMMAND"
       exit 1
     else
-      new_setup "${NAME}"
+      new_setup "${NAME}" $DRY_RUN $FORCE $QUIET
     fi
   fi
 
@@ -142,7 +150,7 @@ cmd_new() {
       usage "$COMMAND"
       exit 1
     else
-      new_install "${PROFILE}"
+      new_install "${PROFILE}" $DRY_RUN $FORCE $QUIET
     fi
   fi
 
@@ -150,9 +158,6 @@ cmd_new() {
 
 #cmd_doctor() {}
 
-# ==============================================================
-# Usage
-# ==============================================================
 _usage_apply() {
   cat <<EOF
 Usage: dickidots apply [subcommand] -p <profile_name>
@@ -259,10 +264,6 @@ usage() {
     *) _usage_main ;;
   esac
 }
-
-# ==============================================================
-# Entry point
-# ==============================================================
 
 # ensure stow is installed
 if ! command_exists stow; then

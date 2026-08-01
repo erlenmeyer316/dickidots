@@ -123,7 +123,7 @@ resolve_profile_configs() {
 
 resolve_profile_setups() {
   if [[ -z $1 ]]; then
-    print_always "Error:${FUNCNAME[0]}}:Missing parameter: No profiles given."
+    print_always "Error:${FUNCNAME[0]}}:Missing parameter: No profile given."
     exit 1
   fi
 
@@ -132,11 +132,13 @@ resolve_profile_setups() {
     exit 1
   fi
 
-  local -n selected_profiles=$1
-  local -n resolved_setups=$2
+  local profile="${1}"
+  local -n array_out=$2
+  local resolved_profiles=()
 
-  for profile in "${!selected_profiles[@]}"; do
-    local profile_path="${PROFILE_DIR}/${selected_profiles[$profile]}"
+  resolve_profiles "$profile" resolved_profiles
+  for profile in "${!resolved_profiles[@]}"; do
+    local profile_path="${PROFILE_DIR}/${resolved_profiles[$profile]}"
     local deplist="${profile_path}/setups.pkglist"
 
     if ! dir_exists "${profile_path}"; then
@@ -146,8 +148,8 @@ resolve_profile_setups() {
 
     if file_exists "${deplist}"; then
       while IFS= read -r dep; do
-        if ! array_contains "$dep" "${resolved_setups[@]}"; then
-          resolved_setups+=("$dep")
+        if ! array_contains "$dep" "${array_out[@]}"; then
+          array_out+=("$dep")
         fi
       done <"${deplist}"
     fi

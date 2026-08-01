@@ -66,7 +66,7 @@ apply_configs() {
     local CONFIG_NAME="${configs_in[$c]}"
     local CONFIG_PATH="${CONFIG_DIR}/${CONFIG_NAME}"
     if [[ $dry_run -eq 1 ]]; then
-      print_always "[dry-run] applying config ${CONFIG_NAME}"
+      print_always "[config] applying config ${CONFIG_NAME}"
     else
       print_msg "[config]: applying ${configs_in[$c]}" "$quiet"
       if [[ "$force" -eq 1 ]]; then
@@ -89,7 +89,7 @@ remove_configs() {
     local CONFIG_NAME="${configs_in[$c]}"
     local CONFIG_PATH="${CONFIG_DIR}/${CONFIG_NAME}"
     if [[ $dry_run -eq 1 ]]; then
-      print_always "[dry-run] stow -d ${CONFIG_PATH} -t ~ -D ${CONFIG_NAME}"
+      print_always "[config] stow -d ${CONFIG_PATH} -t ~ -D ${CONFIG_NAME}"
     else
       print_msg "[config]: applying ${configs_in[$c]}" "$quiet"
       if [[ "$force" -eq 1 ]]; then
