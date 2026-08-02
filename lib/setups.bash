@@ -48,11 +48,11 @@ execute_pre_apply() {
 
   for setup in "${!setups_in[@]}"; do
     local setup_script="${SETUP_DIR}/$setup/pre_apply.bash"
-    file_exists "${setup_script}" || return 0
+    file_exists "$setup_script" || return 0
     if [[ "$dry_run" -eq 1 ]]; then
       print_always "[setup] bash ${setup_script}"
     else
-      bash "${setup_script}"
+      bash "$setup_script"
     fi
   done
 }
@@ -82,11 +82,11 @@ execute_pre_install() {
 
   for setup in "${!setups_in[@]}"; do
     local setup_script="${SETUP_DIR}/$setup/pre_install.bash"
-    file_exists "${setup_script}" || return 0
+    file_exists "$setup_script" || return 0
     if [[ "$dry_run" -eq 1 ]]; then
       print_always "[setup] bash ${setup_script}"
     else
-      bash "${setup_script}"
+      bash "$setup_script"
     fi
   done
 }
@@ -99,11 +99,11 @@ execute_pre_remove() {
 
   for setup in "${!setups_in[@]}"; do
     local setup_script="${SETUP_DIR}/$setup/pre_remove.bash"
-    file_exists "${setup_script}" || return 0
+    file_exists "$setup_script" || return 0
     if [[ "$dry_run" -eq 1 ]]; then
       print_always "[setup] bash ${setup_script}"
     else
-      bash "${setup_script}"
+      bash "$setup_script"
     fi
   done
 }
@@ -116,11 +116,11 @@ execute_pre_remove_install() {
 
   for setup in "${!setups_in[@]}"; do
     local setup_script="${SETUP_DIR}/$setup/pre_remove.bash"
-    file_exists "${setup_script}" || return 0
+    file_exists "$setup_script" || return 0
     if [[ "$dry_run" -eq 1 ]]; then
       print_always "[setup] bash ${setup_script}"
     else
-      bash "${setup_script}"
+      bash "$setup_script"
     fi
   done
 }
@@ -133,11 +133,11 @@ execute_pre_remove_configs() {
 
   for setup in "${!setups_in[@]}"; do
     local setup_script="${SETUP_DIR}/$setup/pre_remove.bash"
-    file_exists "${setup_script}" || return 0
+    file_exists "$setup_script" || return 0
     if [[ "$dry_run" -eq 1 ]]; then
       print_always "[setup] bash ${setup_script}"
     else
-      bash "${setup_script}"
+      bash "$setup_script"
     fi
   done
 }
@@ -150,11 +150,11 @@ execute_post_apply() {
 
   for setup in "${!setups_in[@]}"; do
     local setup_script="${SETUP_DIR}/$setup/post_apply.bash"
-    file_exists "${setup_script}" || return 0
+    file_exists "$setup_script" || return 0
     if [[ "$dry_run" -eq 1 ]]; then
       print_always "[setup] bash ${setup_script}"
     else
-      bash "${setup_script}"
+      bash "$setup_script"
     fi
   done
 }
@@ -167,11 +167,11 @@ execute_post_config() {
 
   for setup in "${!setups_in[@]}"; do
     local setup_script="${SETUP_DIR}/$setup/post_config.bash"
-    file_exists "${setup_script}" || return 0
+    file_exists "$setup_script" || return 0
     if [[ "$dry_run" -eq 1 ]]; then
       print_always "[setup] bash ${setup_script}"
     else
-      bash "${setup_script}"
+      bash "$setup_script"
     fi
   done
 }
@@ -184,11 +184,11 @@ execute_post_install() {
 
   for setup in "${!setups_in[@]}"; do
     local setup_script="${SETUP_DIR}/$setup/post_install.bash"
-    file_exists "${setup_script}" || return 0
+    file_exists "$setup_script" || return 0
     if [[ "$dry_run" -eq 1 ]]; then
       print_always "[setup] bash ${setup_script}"
     else
-      bash "${setup_script}"
+      bash "$setup_script"
     fi
   done
 }
@@ -201,11 +201,11 @@ execute_post_remove() {
 
   for setup in "${!setups_in[@]}"; do
     local setup_script="${SETUP_DIR}/$setup/post_remove.bash"
-    file_exists "${setup_script}" || return 0
+    file_exists "$setup_script" || return 0
     if [[ "$dry_run" -eq 1 ]]; then
       print_always "[setup] bash ${setup_script}"
     else
-      bash "${setup_script}"
+      bash "$setup_script"
     fi
   done
 }
@@ -217,11 +217,11 @@ execute_post_remove_install() {
 
   for setup in "${!setups_in[@]}"; do
     local setup_script="${SETUP_DIR}/$setup/post_remove_install.bash"
-    file_exists "${setup_script}" || return 0
+    file_exists "$setup_script" || return 0
     if [[ "$dry_run" -eq 1 ]]; then
       print_always "[setup] bash ${setup_script}"
     else
-      bash "${setup_script}"
+      bash "$setup_script"
     fi
   done
 }
@@ -233,11 +233,11 @@ execute_post_remove_config() {
 
   for setup in "${!setups_in[@]}"; do
     local setup_script="${SETUP_DIR}/$setup/post_remove_config.bash"
-    file_exists "${setup_script}" || return 0
+    file_exists "$setup_script" || return 0
     if [[ "$dry_run" -eq 1 ]]; then
       print_always "[setup] bash ${setup_script}"
     else
-      bash "${setup_script}"
+      bash "$setup_script"
     fi
   done
 }
