@@ -1,0 +1,17 @@
+FROM debian:trixie
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+sudo git stow curl ca-certificates locales dialog gpg \
+&& rm -rf /var/lib/apt/lists/*
+
+RUN useradd -m -s /bin/bash tester \
+&& echo "tester ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/tester \
+&& chmod 0440 /etc/sudoers.d/tester
+
+USER tester
+WORKDIR /home/tester
+
+RUN git clone http://github.com/erlenmeyer316/dickidots.git
+
+WORKDIR /home/tester/dickidots
+CMD ["/bin/bash"]

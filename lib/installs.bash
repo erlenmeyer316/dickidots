@@ -65,9 +65,7 @@ install() {
   fi
 
   print_msg "[$pm] Refreshing package index..." "$quiet"
-  if [ ! $dry_run ]; then
-    pkg_update_repos
-  fi
+  pkg_update_repos "$dry_run" "$force" "$quiet"
 
   local available=()
   local to_install=()
@@ -81,6 +79,13 @@ install() {
       continue
     fi
 
+    if ! pkg_is_installed "$bin"; then
+      print_msg "[${pm}] Marking ${bin} for install" "$quiet"
+      to_install+=("$bin")
+    else
+      print_msg "[${pm}] ${bin} already installed" "$quiet"
+    fi
+
     if pkg_exists "$bin"; then
       available+=("$bin")
     else
@@ -88,20 +93,15 @@ install() {
     fi
   done
 
-  for avl in "${available[@]}"; do
-    if ! pkg_is_installed "$avl"; then
-      print_msg "[${pm}] Marking ${avl} for install" "$quiet"
-      to_install+=("$avl")
+  for bin in "${to_install[@]}"; do
+    if pkg_exists "$bin"; then
+      available+=("$bin")
     else
-      print_msg "[${pm}] ${avl} already installed" "$quiet"
+      print_always "Warning: [${pm}] '${bin}' not found in repository — skipping."
     fi
   done
 
-  print_msg "[${pm}] Installing: ${to_install[*]}" "$quiet"
-
-  if [ ! $dry_run ]; then
-    pkg_install "${to_install[@]}"
-  fi
+  pkg_install available "$dry_run" "$force" "$quiet"
 
 }
 

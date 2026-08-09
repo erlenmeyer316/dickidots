@@ -68,9 +68,16 @@ apply_configs() {
     if [[ $dry_run -eq 1 ]]; then
       print_always "[config] applying config ${CONFIG_NAME}"
     else
-      print_msg "[config]: applying ${configs_in[$c]}" "$quiet"
       if [[ "$force" -eq 1 ]]; then
+        if ! git -C "${_SCRIPT_DIR}" diff --quiet; then
+          print_always "Error: repo has uncommitted changes. Aborting --force."
+          print_always "Review with: git -C ${_SCRIPT_DIR} diff"
+          exit 1
+        fi
+
+        print_msg "[config]: applying ${configs_in[$c]}" "$quiet"
         stow --adopt -d "${CONFIG_DIR}" -t ~ -R "${CONFIG_NAME}"
+        git -C "${_SCRIPT_DIR}" reset --hard
       else
         stow -d "${CONFIG_DIR}" -t ~ -R "${CONFIG_NAME}"
       fi
@@ -92,7 +99,7 @@ remove_configs() {
       print_always "[config] stow -d ${CONFIG_PATH} -t ~ -D ${CONFIG_NAME}"
     else
       print_msg "[config]: applying ${configs_in[$c]}" "$quiet"
-      if [[ "$force" -eq 1 ]]; then
+      if [[ $force -eq 1 ]]; then
         stow --adopt -d "${CONFIG_DIR}" -t ~ -D "${CONFIG_NAME}"
       else
         stow -d "${CONFIG_DIR}" -t ~ -D "${CONFIG_NAME}"
