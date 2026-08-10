@@ -1,1 +1,1 @@
-alias dotfiles="$HOME/dotfiles/dotfiles.sh"
+alias dotfiles="$HOME/dickidots/dickidots.bash"
