@@ -1,4 +1,4 @@
-# ~/.config/bash/functions.d/syncthing.bash
+# ~/.config/bash/functions.d/syncthing.sh
 
 # ── Internal helpers ──────────────────────────────────────────────────────────
 

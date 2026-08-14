@@ -12,18 +12,18 @@ new_setup() {
   local NEW_SETUP_NAME="${1}"
   local NEW_SETUP_PATH="${SETUP_DIR}/${NEW_SETUP_NAME}"
   local NEW_FILES=(
-    "${NEW_SETUP_PATH}/post-apply.bash"
-    "${NEW_SETUP_PATH}/post-config.bash"
-    "${NEW_SETUP_PATH}/post-install.bash"
-    "${NEW_SETUP_PATH}/post-remove.bash"
-    "${NEW_SETUP_PATH}/post-remove-install.bash"
-    "${NEW_SETUP_PATH}/post-remove-config.bash"
-    "${NEW_SETUP_PATH}/pre-apply.bash"
-    "${NEW_SETUP_PATH}/pre-config.bash"
-    "${NEW_SETUP_PATH}/pre-install.bash"
-    "${NEW_SETUP_PATH}/pre-remove.bash"
-    "${NEW_SETUP_PATH}/pre-remove-install.bash"
-    "${NEW_SETUP_PATH}/pre-remove-configs.bash"
+    "${NEW_SETUP_PATH}/post-apply.sh"
+    "${NEW_SETUP_PATH}/post-config.sh"
+    "${NEW_SETUP_PATH}/post-install.sh"
+    "${NEW_SETUP_PATH}/post-remove.sh"
+    "${NEW_SETUP_PATH}/post-remove-install.sh"
+    "${NEW_SETUP_PATH}/post-remove-config.sh"
+    "${NEW_SETUP_PATH}/pre-apply.sh"
+    "${NEW_SETUP_PATH}/pre-config.sh"
+    "${NEW_SETUP_PATH}/pre-install.sh"
+    "${NEW_SETUP_PATH}/pre-remove.sh"
+    "${NEW_SETUP_PATH}/pre-remove-install.sh"
+    "${NEW_SETUP_PATH}/pre-remove-configs.sh"
   )
 
   local basescript=( '#!/usr/bin/env bash' 'set -euo pipefail' 'echo "Edit $(dirname "$0")/$(basename "$0") or delete if not needed"')
@@ -55,7 +55,7 @@ execute_pre_apply() {
   local quiet=$4
 
   for setup in "${setups_in[@]}"; do
-    local setup_script="${SETUP_DIR}/$setup/pre-apply.bash"
+    local setup_script="${SETUP_DIR}/$setup/pre-apply.sh"
     if ! file_exists "${setup_script}"; then
       continue
     fi
@@ -74,7 +74,7 @@ execute_pre_config() {
   local quiet=$4
 
   for setup in "${setups_in[@]}"; do
-    local setup_script="${SETUP_DIR}/${setup}/pre-config.bash"
+    local setup_script="${SETUP_DIR}/${setup}/pre-config.sh"
     if ! file_exists "${setup_script}"; then
       continue
     fi
@@ -93,7 +93,7 @@ execute_pre_install() {
   local quiet=$4
 
   for setup in "${setups_in[@]}"; do
-    local setup_script="${SETUP_DIR}/${setup}/pre-install.bash"
+    local setup_script="${SETUP_DIR}/${setup}/pre-install.sh"
     if ! file_exists "${setup_script}"; then
       continue
     fi
@@ -112,7 +112,7 @@ execute_pre_remove() {
   local quiet=$4
 
   for setup in "${setups_in[@]}"; do
-    local setup_script="${SETUP_DIR}/$setup/pre-remove.bash"
+    local setup_script="${SETUP_DIR}/$setup/pre-remove.sh"
     if ! file_exists "${setup_script}"; then
       continue
     fi
@@ -131,7 +131,7 @@ execute_pre_remove_install() {
   local quiet=$4
 
   for setup in "${setups_in[@]}"; do
-    local setup_script="${SETUP_DIR}/$setup/pre-remove.bash"
+    local setup_script="${SETUP_DIR}/$setup/pre-remove.sh"
     if ! file_exists "${setup_script}"; then
       continue
     fi
@@ -150,7 +150,7 @@ execute_pre_remove_config() {
   local quiet=$4
 
   for setup in "${setups_in[@]}"; do
-    local setup_script="${SETUP_DIR}/$setup/pre-remove.bash"
+    local setup_script="${SETUP_DIR}/$setup/pre-remove.sh"
     if ! file_exists "${setup_script}"; then
       continue
     fi
@@ -169,7 +169,7 @@ execute_post_apply() {
   local quiet=$4
 
   for setup in "${setups_in[@]}"; do
-    local setup_script="${SETUP_DIR}/$setup/post-apply.bash"
+    local setup_script="${SETUP_DIR}/$setup/post-apply.sh"
     if ! file_exists "${setup_script}"; then
       continue
     fi
@@ -188,7 +188,7 @@ execute_post_config() {
   local quiet=$4
 
   for setup in "${setups_in[@]}"; do
-    local setup_script="${SETUP_DIR}/$setup/post-config.bash"
+    local setup_script="${SETUP_DIR}/$setup/post-config.sh"
     if ! file_exists "${setup_script}"; then
       continue
     fi
@@ -207,7 +207,7 @@ execute_post_install() {
   local quiet=$4
 
   for setup in "${setups_in[@]}"; do
-    local setup_script="${SETUP_DIR}/$setup/post-install.bash"
+    local setup_script="${SETUP_DIR}/$setup/post-install.sh"
     if ! file_exists "${setup_script}"; then
       continue
     fi
@@ -226,7 +226,7 @@ execute_post_remove() {
   local quiet=$4
 
   for setup in "${setups_in[@]}"; do
-    local setup_script="${SETUP_DIR}/$setup/post-remove.bash"
+    local setup_script="${SETUP_DIR}/$setup/post-remove.sh"
     if ! file_exists "${setup_script}"; then
       continue
     fi
@@ -244,7 +244,7 @@ execute_post_remove_install() {
   local quiet=$4
 
   for setup in "${setups_in[@]}"; do
-    local setup_script="${SETUP_DIR}/$setup/post-remove-install.bash"
+    local setup_script="${SETUP_DIR}/$setup/post-remove-install.sh"
     if ! file_exists "${setup_script}"; then
       continue
     fi
@@ -262,7 +262,7 @@ execute_post_remove_config() {
   local quiet=$4
 
   for setup in "${setups_in[@]}"; do
-    local setup_script="${SETUP_DIR}/$setup/post-remove-config.bash"
+    local setup_script="${SETUP_DIR}/$setup/post-remove-config.sh"
     if ! file_exists "${setup_script}"; then
       continue
     fi

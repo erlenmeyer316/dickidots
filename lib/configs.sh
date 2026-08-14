@@ -21,10 +21,10 @@ new_config() {
   )
 
   local NEW_FILES=(
-    "${NEW_BASH_PATH}/aliases.d/${NEW_CONFIG_NAME}.bash"
-    "${NEW_BASH_PATH}/completions.d/${NEW_CONFIG_NAME}.bash"
-    "${NEW_BASH_PATH}/config.d/${NEW_CONFIG_NAME}.bash"
-    "${NEW_BASH_PATH}/functions.d/${NEW_CONFIG_NAME}.bash"
+    "${NEW_BASH_PATH}/aliases.d/${NEW_CONFIG_NAME}.sh"
+    "${NEW_BASH_PATH}/completions.d/${NEW_CONFIG_NAME}.sh"
+    "${NEW_BASH_PATH}/config.d/${NEW_CONFIG_NAME}.sh"
+    "${NEW_BASH_PATH}/functions.d/${NEW_CONFIG_NAME}.sh"
   )
 
   if dir_exists "${NEW_CONFIG_PATH}"; then

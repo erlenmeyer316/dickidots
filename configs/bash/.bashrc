@@ -9,8 +9,8 @@ case $- in
 esac
 
 # Initialize moduler bash profile
-if [ -f "$HOME/.config/bash/init.bash" ]; then
-    . "$HOME/.config/bash/init.bash"
+if [ -f "$HOME/.config/bash/init.sh" ]; then
+    . "$HOME/.config/bash/init.sh"
 fi
 
 # Initialize local bashrc

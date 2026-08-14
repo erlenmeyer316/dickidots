@@ -2,11 +2,11 @@
 
 shopt -s nullglob
 
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/core.bash"
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/profiles.bash"
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/configs.bash"
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/installs.bash"
-source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/setups.bash"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/core.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/profiles.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/configs.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/installs.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/setups.sh"
 
 finish_msg() {
   if file_exists "$HOME/.profile"; then
