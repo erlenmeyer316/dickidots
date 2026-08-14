@@ -8,6 +8,14 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/configs.bash"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/installs.bash"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/setups.bash"
 
+finish_msg() {
+  if file_exists "$HOME/.profile"; then
+    print_msg ""
+    print_msg "----------------------------------------------------------------"
+    print_msg "Done! Run 'source ~/.profile' to apply changes."
+  fi
+}
+
 cmd_apply() {
   local cmd_configs=()
   local cmd_installs=()
@@ -41,8 +49,9 @@ cmd_apply() {
     execute_pre_config cmd_setups $DRY_RUN $FORCE $QUIET
     apply_configs cmd_configs $DRY_RUN $FORCE $QUIET
     execute_post_config cmd_setups $DRY_RUN $FORCE $QUIET
-
   fi
+
+  finish_msg
 }
 
 cmd_remove() {
@@ -54,16 +63,22 @@ cmd_remove() {
   resolve_profile_setups "$PROFILE" cmd_setups
 
   if [[ -z "$SUBCOMMAND" ]]; then
-    execute_pre_remove cmd_setups $DRY_RUN $FORCE $QUIET
-    do_remove_configs cmd_configs $DRY_RUN $FORCE $QUIET
-    do_remove_installs cmd_installs $DRY_RUN $FORCE $QUIET
-    execute_post_remove cmd_setups $DRY_RUN $FORCE $QUIET
+    execute_pre_remove cmd_setups
 
+    execute_pre_remove_install cmd_setups $DRY_RUN $FORCE $QUIET
+    remove_installs cmd_installs $DRY_RUN $FORCE $QUIET
+    execute_post_remove_install cmd_setups $DRY_RUN $FORCE $QUIET
+
+    execute_pre_remove_config cmd_setups $DRY_RUN $FORCE $QUIET
+    remove_configs cmd_configs $DRY_RUN $FORCE $QUIET
+    execute_post_remove_config cmd_setups $DRY_RUN $FORCE $QUIET
+
+    execute_post_remove cmd_setups
   fi
 
   if [ "$SUBCOMMAND" == "install" ]; then
     execute_pre_remove_install cmd_setups $DRY_RUN $FORCE $QUIET
-    remove_installsi cmd_installs $DRY_RUN $FORCE $QUIET
+    remove_installs cmd_installs $DRY_RUN $FORCE $QUIET
     execute_post_remove_install cmd_setups $DRY_RUN $FORCE $QUIET
 
   fi
@@ -72,8 +87,9 @@ cmd_remove() {
     execute_pre_remove_config cmd_setups $DRY_RUN $FORCE $QUIET
     remove_configs cmd_configs $DRY_RUN $FORCE $QUIET
     execute_post_remove_config cmd_setups $DRY_RUN $FORCE $QUIET
-
   fi
+
+  finish_msg
 }
 
 cmd_list() {

@@ -80,7 +80,7 @@ install() {
     fi
 
     if ! pkg_is_installed "$bin"; then
-      print_msg "[${pm}] Marking ${bin} for install" "$quiet"
+      print_msg "[${pm}] Marking ${bin} for installation" "$quiet"
       to_install+=("$bin")
     else
       print_msg "[${pm}] ${bin} already installed" "$quiet"
@@ -105,7 +105,7 @@ install() {
 
 }
 
-remove() {
+uninstall() {
   local -n pkglist=$1
   local dry_run=$2
   local force=$3
@@ -116,22 +116,26 @@ remove() {
     return 0
   fi
 
+  local to_remove=()
+
   for pkg in "${pkglist[@]}"; do
     IFS=: read -r key bin <<<"$pkg"
     unset IFS
 
     if [ "$key" != "$pm" ]; then
+      print_msg "not valid package" "$quiet"
       continue
     fi
 
-    local to_remove=()
-    if ! pkg_is_installed "$pkg"; then
-      print_msg "  [${pm}] Queuing ${pkg}" "$quiet"
-      to_remove+=("$pkg")
+    if pkg_is_installed "$bin"; then
+      print_msg "[${pm}] Marking ${bin} for removal" "$quiet"
+      to_remove+=("$bin")
+    else
+      print_msg "[${pm}] ${bin} not installed" "$quiet"
     fi
-
-    print_msg "[${pm}] Removing: ${to_remove[*]}" "$quiet"
-    pkg_install "${to_remove[@]}"
   done
+
+  pkg_uninstall to_remove "$dry_run" "$force" "$quiet"
+
 
 }

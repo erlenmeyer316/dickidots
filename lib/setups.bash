@@ -12,15 +12,21 @@ new_setup() {
   local NEW_SETUP_NAME="${1}"
   local NEW_SETUP_PATH="${SETUP_DIR}/${NEW_SETUP_NAME}"
   local NEW_FILES=(
-    "${NEW_SETUP_PATH}/pre-apply.bash"
     "${NEW_SETUP_PATH}/post-apply.bash"
-    "${NEW_SETUP_PATH}/pre-config.bash"
     "${NEW_SETUP_PATH}/post-config.bash"
-    "${new_setup_path}/pre-install.bash"
-    "${new_setup_path}/post-install.bash"
-    "${new_setup_path}/pre-remove.bash"
-    "${new_setup_path}/post-remove.bash"
+    "${NEW_SETUP_PATH}/post-install.bash"
+    "${NEW_SETUP_PATH}/post-remove.bash"
+    "${NEW_SETUP_PATH}/post-remove-install.bash"
+    "${NEW_SETUP_PATH}/post-remove-config.bash"
+    "${NEW_SETUP_PATH}/pre-apply.bash"
+    "${NEW_SETUP_PATH}/pre-config.bash"
+    "${NEW_SETUP_PATH}/pre-install.bash"
+    "${NEW_SETUP_PATH}/pre-remove.bash"
+    "${NEW_SETUP_PATH}/pre-remove-install.bash"
+    "${NEW_SETUP_PATH}/pre-remove-configs.bash"
   )
+
+  local basescript=( '#!/usr/bin/env bash' 'set -euo pipefail' 'echo "Edit $(dirname "$0")/$(basename "$0") or delete if not needed"')
 
   if dir_exists "$NEW_SETUP_PATH"; then
     print_always "Error: A setup named ${NEW_SETUP_NAME} already exists."
@@ -31,6 +37,8 @@ new_setup() {
 
   for file in "${!NEW_FILES[@]}"; do
     file_create "${NEW_FILES[$file]}"
+    printf '%s\n' "${basescript[@]}" >> "${NEW_FILES[$file]}"
+    chmod +x "${NEW_FILES[$file]}"
   done
 
 }
@@ -135,7 +143,7 @@ execute_pre_remove_install() {
   done
 }
 
-execute_pre_remove_configs() {
+execute_pre_remove_config() {
   local -n setups_in=$1
   local dry_run=$2
   local force=$3

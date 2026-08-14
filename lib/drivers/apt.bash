@@ -27,12 +27,17 @@ pkg_install() {
   fi
 }
 
-pkg_remove() {
-  local dry_run=$1
-  local force=$2
-  local quiet=$3
+pkg_uninstall() {
+  local -n pkgs_in=$1
+  local dry_run=$2
+  local force=$3
+  local quiet=$4
 
-  sudo apt-get remove -y "$@"
+  if [[ $dry_run -eq 1 ]]; then
+    print_msg "[${pm}] sudo apt remove -y ${pkgs_in[*]}"
+  else
+    sudo apt-get remove -y ${pkgs_in[*]}
+  fi
 }
 
 pkg_is_installed() {
