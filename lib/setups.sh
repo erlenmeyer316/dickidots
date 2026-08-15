@@ -26,7 +26,7 @@ new_setup() {
     "${NEW_SETUP_PATH}/pre-remove-configs.sh"
   )
 
-  local basescript=( '#!/usr/bin/env bash' 'set -euo pipefail' 'echo "Edit $(dirname "$0")/$(basename "$0") or delete if not needed"')
+  local basescript=( '#!/usr/bin/env bash' 'set -euo pipefail' 'echo "[setup] ${NEW_SETUP_NAME} - $(basename "$0")"')
 
   if dir_exists "$NEW_SETUP_PATH"; then
     print_always "Error: A setup named ${NEW_SETUP_NAME} already exists."
