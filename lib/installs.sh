@@ -136,6 +136,4 @@ uninstall() {
   done
 
   pkg_uninstall to_remove "$dry_run" "$force" "$quiet"
-
-
 }

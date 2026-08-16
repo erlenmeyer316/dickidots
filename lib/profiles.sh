@@ -40,15 +40,36 @@ list_profiles() {
 }
 
 list_profile_configs() {
-  print_always "Not implemented"
+  local profile=$1
+  local profile_configs=()
+  resolve_profile_configs "$profile" profile_configs
+  
+  print_msg "${profile} configs"
+  for config in "${profile_configs[@]}"; do
+    print_msg "   - ${config}"
+  done;
 }
 
 list_profile_setups() {
-  print_always "Not implemented"
+  local profile=$1
+  local profile_setups=()
+  resolve_profile_setups "$profile" profile_setups
+  
+  print_msg "${profile} setups"
+  for setup in "${profile_setups[@]}"; do
+    print_msg "   - ${setup}"
+  done;
 }
 
 list_profile_installs() {
-  print_always "Not implemented"
+  local profile=$1
+  local profile_installs=()
+  resolve_profile_installs "$profile" profile_installs
+  
+  print_msg "${profile} installs"
+  for install in "${profile_installs[@]}"; do
+    print_msg "   - ${install}"
+  done;
 }
 
 resolve_profiles() {
