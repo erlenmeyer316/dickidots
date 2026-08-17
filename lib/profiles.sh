@@ -72,6 +72,17 @@ list_profile_installs() {
   done;
 }
 
+list_profile_dependencies() {
+  local profile=$1
+  local profile_deps=()
+  resolve_profiles "$profile" profile_deps
+  unset 'profile_deps[${#profile_deps[@]}-1]'
+  print_msg "${profile} dependencies"
+  for dep in "${profile_deps[@]}"; do
+    print_msg "   - ${dep}"
+  done;
+}
+
 resolve_profiles() {
   if [[ -z $1 ]]; then
     print_always "Error:${FUNCNAME[0]}}:Missing parameter: No profile given."

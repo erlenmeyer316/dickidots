@@ -123,6 +123,17 @@ cmd_list() {
       list_profile_installs "${PROFILE}"
     fi
   fi
+
+  if [ "$SUBCOMMAND" == "deps" ]; then
+    if [ -z "$PROFILE" ]; then
+      print_always "Error: No profile given"
+      print_always ""
+      usage "$COMMAND"
+      exit 1
+    else
+      list_profile_dependencies "${PROFILE}"
+    fi
+  fi
 }
 
 cmd_new() {
@@ -211,6 +222,7 @@ Subcommands:
   config     List configuration files (globally, or filtered by profile)
   setup      List setup configurations (globally, or filtered by profile)
   install    List installation scripts for a specific profile
+  deps       List profile depenedencies for a specific profile
 
 Options:
   -p, --profile <name>    Filter results by a specific profile
@@ -361,7 +373,7 @@ case "$COMMAND" in
   list | new)
     # Check if the next argument is a known subcommand
     case "$1" in
-      profile | config | install | setup)
+      profile | config | install | setup | deps)
         SUBCOMMAND="$1"
         shift
         ;;
