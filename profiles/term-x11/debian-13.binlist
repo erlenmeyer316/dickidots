@@ -6,3 +6,4 @@ apt:libxft-dev
 apt:libxext-dev
 apt:xclip
 apt:xsel
+apt:libharfbuzz-dev

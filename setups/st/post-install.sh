@@ -15,11 +15,11 @@ if ! command -v make >/dev/null 2>&1; then
     exit 0
 fi
 
-ST_BUILD_DIR="/tmp/dotfiles/build/st"
+ST_BUILD_DIR="/tmp//build/st"
 ST_GIT_REPO="https://github.com/erlenmeyer316/st"
 
+rm -rf "$ST_BUILD_DIR"
 mkdir -p "$ST_BUILD_DIR"
 git -C "$ST_BUILD_DIR" clone "$ST_GIT_REPO" .
 make -C "$ST_BUILD_DIR"
 sudo make -C "$ST_BUILD_DIR" install
-rm -rf "$ST_BUILD_DIR"
