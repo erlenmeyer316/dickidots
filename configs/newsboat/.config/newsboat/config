@@ -1,0 +1,8 @@
+urls-source "freshrss"
+freshrss-url "https://freshrss.dickinet.info/api/greader.php"
+freshrss-login "erlenmeyer316"
+freshrss-passwordeval "kp get freshrss.dickinet.info"
+browser links
+show-read-feeds yes
+auto-reload yes
+reload-threads 100
