@@ -84,13 +84,13 @@ list_profile_dependencies() {
 }
 
 resolve_profiles() {
-  if [[ -z $1 ]]; then
-    print_always "Error:${FUNCNAME[0]}}:Missing parameter: No profile given."
+  if [[ -z "${1}" ]]; then
+    print_always "Error:${FUNCNAME[0]}:Missing parameter: No profile given."
     exit 1
   fi
 
-  if [[ -z $2 ]]; then
-    print_always "Error:${FUNCNAME[0]}}:Missing parameter: No array given."
+  if [[ -z "${2}" ]]; then
+    print_always "Error:${FUNCNAME[0]}:Missing parameter: No array given."
     exit 1
   fi
 
