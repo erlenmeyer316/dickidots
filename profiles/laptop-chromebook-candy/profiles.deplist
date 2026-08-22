@@ -1,6 +1,6 @@
 base
 base-dev
-personal-syncthing
+pkg-syncthing
 personal-keepassxc
 personal-email
 personal-contacts

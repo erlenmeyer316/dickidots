@@ -1,0 +1,14 @@
+apt:file
+apt:ffmpeg
+apt:7zip
+apt:jq
+apt:poppler-utils
+apt:fd-find
+apt:ripgrep
+apt:fzf
+apt:zoxide
+apt:resvg
+apt:imagemagick
+apt:xclip
+apt:xsel
+apt:yazi
