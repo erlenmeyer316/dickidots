@@ -293,6 +293,16 @@ usage() {
   esac
 }
 
+debug(){
+  echo "COMMAND: ${COMMAND}"
+  echo "SUBCOMMAND: ${SUBCOMMAND}"
+  echo "FORCE: ${FORCE}"
+  echo "QUIET: ${QUIET}"
+  echo "DRY RUN: ${DRY_RUN}"
+  echo "PROFILE: ${PROFILE}"
+  echo "NAME: ${NAME}"
+}
+
 # ensure stow is installed
 if ! command_exists stow; then
   print_always "Error: stow is not installed. Please install stow and try again."
