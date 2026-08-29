@@ -82,8 +82,14 @@ apply_configs() {
         stow -d "${CONFIG_DIR}" -t ~ -R "${CONFIG_NAME}"
       fi
     fi
-
   done
+
+  if [[ "$force" -eq 1 ]]; then
+    git -C "${_SCRIPT_DIR}" reset --hard
+  fi
+
+
+
 }
 
 remove_configs() {
