@@ -77,7 +77,6 @@ apply_configs() {
 
         print_msg "[config]: applying ${configs_in[$c]}" "$quiet"
         stow --adopt -d "${CONFIG_DIR}" -t ~ -R "${CONFIG_NAME}"
-        git -C "${_SCRIPT_DIR}" reset --hard
       else
         stow -d "${CONFIG_DIR}" -t ~ -R "${CONFIG_NAME}"
       fi
