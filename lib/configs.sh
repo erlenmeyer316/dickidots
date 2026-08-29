@@ -76,7 +76,7 @@ apply_configs() {
         fi
 
         print_msg "[config]: applying ${configs_in[$c]}" "$quiet"
-        stow --dotfiles --adopt -d "${CONFIG_DIR}" -t ~ -S "${CONFIG_NAME}"
+        stow --dotfiles --adopt -d "${CONFIG_DIR}" -t ~ -R "${CONFIG_NAME}"
       else
         print_msg "[config]: applying ${configs_in[$c]}" "$quiet"
         stow --dotfiles -d "${CONFIG_DIR}" -t ~ -S "${CONFIG_NAME}"
