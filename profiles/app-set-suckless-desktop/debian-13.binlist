@@ -3,3 +3,4 @@ apt:libxft-dev
 apt:libxinerama-dev
 apt:xorg
 apt:libimlib2-dev
+apt:libxrandr-dev
