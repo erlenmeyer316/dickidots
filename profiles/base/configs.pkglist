@@ -6,5 +6,10 @@ fzf
 git
 grep
 less
+nala
 neovim
 ranger
+starship
+tmux
+w3m
+zoxide

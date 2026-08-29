@@ -1,0 +1,5 @@
+apt:libx11-dev
+apt:libxft-dev
+apt:libxinerama-dev
+apt:xorg
+apt:libimlib2-dev

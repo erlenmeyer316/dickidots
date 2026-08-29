@@ -1,8 +1,0 @@
-apt:i3
-apt:xinit
-apt:xdg-user-dirs
-apt:libx11-dev
-apt:libxft-dev
-apt:libxext-dev
-apt:xclip
-apt:xsel

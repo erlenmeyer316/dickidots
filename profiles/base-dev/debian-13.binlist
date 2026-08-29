@@ -1,3 +1,6 @@
 apt:gh
 apt:lazygit
+apt:libharfbuzz-dev
 apt:shellcheck
+apt:make
+apt:gcc
