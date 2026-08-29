@@ -78,6 +78,7 @@ apply_configs() {
         print_msg "[config]: applying ${configs_in[$c]}" "$quiet"
         stow --adopt -d "${CONFIG_DIR}" -t ~ -R "${CONFIG_NAME}"
       else
+        print_msg "[config]: applying ${configs_in[$c]}" "$quiet"
         stow -d "${CONFIG_DIR}" -t ~ -R "${CONFIG_NAME}"
       fi
     fi
@@ -86,9 +87,6 @@ apply_configs() {
   if [[ "$force" -eq 1 ]]; then
     git -C "${_SCRIPT_DIR}" reset --hard
   fi
-
-
-
 }
 
 remove_configs() {
