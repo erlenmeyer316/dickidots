@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# kp — keepassxc-cli wrapper
+# Deps: keepassxc-cli, libsecret-tools, fzf, xclip/xsel
+
+set -euo pipefail
+
+prefix="XINIT_"
+wm=$1
+  
+while IFS= read -r name; do
+  if [ "${wm}" == "${!name}" ]; then
+    echo "Launching ${wm}"
+    . "${HOME}/wms.d/99-wm-${!name}.sh"
+  fi
+done < <(compgen -e "$prefix")
+
+
