@@ -1,0 +1,9 @@
+#!/bin/bash
+
+session="i3kiosk" 
+
+exset -dpms
+xset s off
+xset s noblank
+
+exec i3

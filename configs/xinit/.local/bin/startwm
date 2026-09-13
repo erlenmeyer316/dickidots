@@ -10,7 +10,7 @@ wm=$1
 while IFS= read -r name <&3; do
   if [ "${wm}" == "${!name}" ]; then
     echo "Launching ${wm}..."
-    . "${HOME}/wms.d/99-wm-${!name}.sh"
+    . "${HOME}/xinitrc.d/99-wm-${!name}.sh"
   fi
 done 3< <(compgen -e "$prefix")
 
