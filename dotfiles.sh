@@ -335,166 +335,124 @@ if [[ "$#" -eq 0 ]]; then
   exit 1
 fi
 
-# parse global flags
+## 1. Parse pre-command global flags
 FORCE=0
 QUIET=0
 DRY_RUN=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    -f | --force)
-      FORCE=1
-      shift
+    -f | --force) 
+      FORCE=1 
+      shift 
       ;;
-    -q | --quiet)
-      QUIET=1
-      shift
+    -q | --quiet) 
+      QUIET=1 
+      shift 
       ;;
-    -d | --dry-run)
-      DRY_RUN=1
-      shift
+    -d | --dry-run) 
+      DRY_RUN=1 
+      shift 
       ;;
-    -h | --help)
-      usage
-      exit 0
+    -h | --help) 
+      usage 
+      exit 0 
       ;;
     -*)
-      print_always "Unknown global flag: '$1'"
-      print_always ""
+      print_always "Unknown global flag: '$1'\n"
       usage
       exit 1
       ;;
-    *) break ;; # No more flags, we hit the command!
+    *) break ;;
   esac
 done
 
-# If no arguments are left after stripping flags, then no commands were passed
-if [[ $# -eq 0 ]]; then
-  usage
+if [[ $# -eq 0 ]]; then  
+  usage 
   exit 1
 fi
 
-# parse command
 COMMAND="$1"
 shift
 
-# parse subcommand
+# Handle per-command help flag early (e.g., "dickidots apply --help")
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  usage "$COMMAND"
+  exit 0
+fi
+
 SUBCOMMAND=""
 case "$COMMAND" in
   apply | remove)
-    # Check if the next argument is a known subcommand
-    case "$1" in
-      config | install)
-        SUBCOMMAND="$1"
-        shift
+    case "${1:-}" in
+      config | install) 
+        SUBCOMMAND="$1" 
+        shift 
         ;;
-      -*)
-        # It's a flag (like -p), no subcommand
-        ;;
+      -* | "") ;; 
       *)
-        print_always "Unknown subcommand for $COMMAND: '$1'"
-        print_always ""
+        print_always "Unknown subcommand for $COMMAND: '$1'\n"
         usage "$COMMAND"
         exit 1
         ;;
     esac
     ;;
   list | new)
-    # Check if the next argument is a known subcommand
-    case "$1" in
-      profile | config | install | setup | deps)
-        SUBCOMMAND="$1"
-        shift
+    case "${1:-}" in
+      profile | config | install | setup | deps) 
+        SUBCOMMAND="$1" 
+        shift 
         ;;
-      -*)
-        # It's a flag (like -p), no subcommand
-        ;;
+      -* | "") ;;
       *)
-        print_always "Unknown subcommand for $COMMAND: '$1'"
-        print_always ""
+        print_always "Unknown subcommand for $COMMAND: '$1'\n"
         usage "$COMMAND"
         exit 1
         ;;
     esac
     ;;
   doctor)
-    # Check if the next argument is a known subcommand
-    case "$1" in
-      fix)
+    case "${1:-}" in
+      fix) 
         SUBCOMMAND="$1"
-        shift
+        shift 
         ;;
+      -* | "") ;;
       *)
-        echo "Unknown subcommand for $COMMAND: $1"
-        print_always ""
+        print_always "Unknown subcommand for $COMMAND: '$1'\n"
         usage "$COMMAND"
         exit 1
         ;;
     esac
     ;;
   *)
-    echo "Unknown command: '$COMMAND'"
-    print_always ""
+    print_always "Unknown command: '$COMMAND'\n"
     usage
     exit 1
     ;;
 esac
 
-# parse command option
 NAME=""
 PROFILE=""
-case "$COMMAND" in
-  new)
-    case "$1" in
-      -n | --name)
-        NAME="$2"
-        ;;
-      -p | --profile)
-        PROFILE="$2"
-        ;;
-      *)
-        print_always "Unknown option '$1'."
-        print_always ""
-        usage "$COMMAND"
-        exit 1
-        ;;
-    esac
-    ;;
-  apply | remove)
-    case "$1" in
-      -p | --profile)
-        PROFILE="$2"
-        ;;
-      *)
-        print_always "Unknown option '$1'."
-        print_always ""
-        usage "$COMMAND"
-        exit 1
-        ;;
-    esac
-    ;;
-  list)
-    case "$1" in
-      -p | --profile)
-        PROFILE="$2"
-        ;;
-      *)
-        ;;
-    esac
-    ;;
-esac
 
-case "$COMMAND" in
-  apply) cmd_apply ;;
-  remove) cmd_remove ;;
-  list) cmd_list ;;
-  new) cmd_new ;;
-  doctor) cmd_doctor ;;
-
-  *)
-    print_always "Unknown command '$COMMAND'"
-    print_always ""
-    usage
-    exit 0
-    ;;
-esac
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -n | --name)
+      NAME="$2"
+      shift 2
+      ;;
+    -p | --profile)
+      PROFILE="$2"
+      shift 2
+      ;;
+    -h | --help)
+      usage "$COMMAND"
+      exit 0
+      ;;
+    *)
+      print_always "Unknown option '$1' for command '$COMMAND'.\n"
+      usage "$COMMAND"
+      exit 1
+      ;;
+  esac
+done
