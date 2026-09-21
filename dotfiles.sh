@@ -185,81 +185,13 @@ cmd_new() {
 
 #cmd_doctor() {}
 
-_usage_apply() {
-  cat <<EOF
-Usage: dickidots apply [subcommand] -p <profile_name>
-
-Subcommands:
-  (default)    Apply both config and install for the profile
-  config       Apply only the configuration files for the profile
-  install      Apply only the installation scripts for the profile
-
-Options:
-  -p, --profile <name>    The name of the profile to target (Required)
-EOF
-}
-
-_usage_remove() {
-  cat <<EOF
-Usage: dickidots remove [subcommand] -p <profile_name>
-
-Subcommands:
-  (default)    Apply both config and install for the profile
-  config       Apply only the configuration files for the profile
-  install      Apply only the installation scripts for the profile
-
-Options:
-  -p, --profile <name>    The name of the profile to target (Required)
-EOF
-}
-
-_usage_list() {
-  cat <<EOF
-Usage: dickidots list <subcommand> [-p <profile_name>]
-
-Subcommands:
-  profile    List all available profiles
-  config     List configuration files (globally, or filtered by profile)
-  setup      List setup configurations (globally, or filtered by profile)
-  install    List installation scripts for a specific profile
-  deps       List profile depenedencies for a specific profile
-
-Options:
-  -p, --profile <name>    Filter results by a specific profile
-EOF
-}
-
-_usage_new() {
-  cat <<EOF
-Usage: dickidots new <subcommand> -p|-n <profile_name>|<name>
-
-Subcommands:
-  profile    Create a new profile template
-  config     Create a new configuration template
-  setup      Create a new setup template
-  install    Create a new install template
-
-Options:
-  -n, --name <name>        The name of the setup, config, or profile to be create
-  -p, --profile <profile>  The name of the profile to add a new install.binlist
-EOF
-}
-
-_usage_doctor() {
-  cat <<EOF
-Usage: dickidots doctor [subcommand]
-
-Check the health of your dotfile environment and dependencies.
-
-Subcommands:
-  fix        Attempt to automatically repair any discovered issues
-
-EOF
+_prog_name() {
+  basename "${BASH_SOURCE[0]:-$0}"
 }
 
 _usage_main() {
   cat <<EOF
-Usage: $(basename "$0") [-f|--force] [-q|--quiet] [-d|--dry-run] <command> [<subcommand>] [options]
+Usage: $(_prog_name) [global options] <command> [<subcommand>] [options]
 
 A dotfile and system configuration manager.
 
@@ -276,7 +208,94 @@ Commands:
   new       Create a new profile, config, setup, or install template
   doctor    Check system health and prerequisites
 
-Run 'dickidots <command> --help' for details on specific subcommands.
+Run '$(_prog_name) <command> --help' for details on specific commands.
+EOF
+}
+
+_usage_apply() {
+  cat <<EOF
+Usage: $(_prog_name) apply [subcommand] -p <profile_name>
+
+Apply configuration files, installation scripts, or setups for a profile.
+
+Subcommands:
+  (default)    Apply both config and install for the profile
+  config       Apply only configuration files
+  install      Apply only installation scripts
+
+Options:
+  -p, --profile <name>    Target profile name (Required)
+  -h, --help              Show command help
+EOF
+}
+
+_usage_remove() {
+  cat <<EOF
+Usage: $(_prog_name) remove [subcommand] -p <profile_name>
+
+Remove configuration files or uninstall items associated with a profile.
+
+Subcommands:
+  (default)    Remove both config and install for the profile
+  config       Remove only configuration files
+  install      Remove only installation scripts
+
+Options:
+  -p, --profile <name>    Target profile name (Required)
+  -h, --help              Show command help
+EOF
+}
+
+_usage_list() {
+  cat <<EOF
+Usage: $(_prog_name) list <subcommand> [-p <profile_name>]
+
+List managed configurations, profiles, setups, or dependencies.
+
+Subcommands:
+  profile    List all available profiles
+  config     List configuration files (global, or filtered by profile)
+  setup      List setup routines (global, or filtered by profile)
+  install    List installation items for a profile (Requires -p)
+  deps       List profile dependencies for a profile (Requires -p)
+
+Options:
+  -p, --profile <name>    Filter or target a specific profile
+  -h, --help              Show command help
+EOF
+}
+
+_usage_new() {
+  cat <<EOF
+Usage: $(_prog_name) new <subcommand> [options]
+
+Create boilerplate templates for new components.
+
+Subcommands:
+  profile    Create a new profile template           (Requires -n <name>)
+  config     Create a new configuration template     (Requires -n <name>)
+  setup      Create a new setup script template      (Requires -n <name>)
+  install    Create a new install manifest template  (Requires -p <profile>)
+
+Options:
+  -n, --name <name>        Name of the profile, config, or setup to create
+  -p, --profile <profile>  Target profile name for an install manifest
+  -h, --help               Show command help
+EOF
+}
+
+_usage_doctor() {
+  cat <<EOF
+Usage: $(_prog_name) doctor [subcommand]
+
+Check environment health, missing dependencies, and system state.
+
+Subcommands:
+  (default)    Run diagnostic checks
+  fix          Attempt automatic resolution of discovered issues
+
+Options:
+  -h, --help   Show command help
 EOF
 }
 
@@ -284,12 +303,12 @@ usage() {
   local command="${1:-}"
 
   case "$command" in
-    apply) _usage_apply "$@" ;;
-    remove) _usage_remove "$@" ;;
-    list) _usage_list "$@" ;;
-    new) _usage_new "$@" ;;
-    doctor) _usage_doctor "$@" ;;
-    *) _usage_main ;;
+    apply)  _usage_apply ;;
+    remove) _usage_remove ;;
+    list)   _usage_list ;;
+    new)    _usage_new ;;
+    doctor) _usage_doctor ;;
+    *)      _usage_main ;;
   esac
 }
 
