@@ -303,16 +303,16 @@ usage() {
   local command="${1:-}"
 
   case "$command" in
-    apply)  _usage_apply ;;
+    apply) _usage_apply ;;
     remove) _usage_remove ;;
-    list)   _usage_list ;;
-    new)    _usage_new ;;
+    list) _usage_list ;;
+    new) _usage_new ;;
     doctor) _usage_doctor ;;
-    *)      _usage_main ;;
+    *) _usage_main ;;
   esac
 }
 
-debug(){
+debug() {
   echo "COMMAND: ${COMMAND}"
   echo "SUBCOMMAND: ${SUBCOMMAND}"
   echo "FORCE: ${FORCE}"
@@ -342,21 +342,21 @@ DRY_RUN=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    -f | --force) 
-      FORCE=1 
-      shift 
+    -f | --force)
+      FORCE=1
+      shift
       ;;
-    -q | --quiet) 
-      QUIET=1 
-      shift 
+    -q | --quiet)
+      QUIET=1
+      shift
       ;;
-    -d | --dry-run) 
-      DRY_RUN=1 
-      shift 
+    -d | --dry-run)
+      DRY_RUN=1
+      shift
       ;;
-    -h | --help) 
-      usage 
-      exit 0 
+    -h | --help)
+      usage
+      exit 0
       ;;
     -*)
       print_always "Unknown global flag: '$1'\n"
@@ -367,8 +367,8 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [[ $# -eq 0 ]]; then  
-  usage 
+if [[ $# -eq 0 ]]; then
+  usage
   exit 1
 fi
 
@@ -385,11 +385,11 @@ SUBCOMMAND=""
 case "$COMMAND" in
   apply | remove)
     case "${1:-}" in
-      config | install) 
-        SUBCOMMAND="$1" 
-        shift 
+      config | install)
+        SUBCOMMAND="$1"
+        shift
         ;;
-      -* | "") ;; 
+      -* | "") ;;
       *)
         print_always "Unknown subcommand for $COMMAND: '$1'\n"
         usage "$COMMAND"
@@ -399,9 +399,9 @@ case "$COMMAND" in
     ;;
   list | new)
     case "${1:-}" in
-      profile | config | install | setup | deps) 
-        SUBCOMMAND="$1" 
-        shift 
+      profile | config | install | setup | deps)
+        SUBCOMMAND="$1"
+        shift
         ;;
       -* | "") ;;
       *)
@@ -413,9 +413,9 @@ case "$COMMAND" in
     ;;
   doctor)
     case "${1:-}" in
-      fix) 
+      fix)
         SUBCOMMAND="$1"
-        shift 
+        shift
         ;;
       -* | "") ;;
       *)
@@ -456,3 +456,19 @@ while [[ $# -gt 0 ]]; do
       ;;
   esac
 done
+
+case "$COMMAND" in
+  apply) cmd_apply ;;
+  remove) cmd_remove ;;
+  list) cmd_list ;;
+  new) cmd_new ;;
+  doctor) cmd_doctor ;;
+
+  *)
+    print_always "Unknown command '$COMMAND'"
+    print_always ""
+    usage
+    exit 0
+    ;;
+esac
+
