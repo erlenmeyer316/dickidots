@@ -335,11 +335,15 @@ if [[ "$#" -eq 0 ]]; then
   exit 1
 fi
 
-## 1. Parse pre-command global flags
+DEFAULT_PROFILE="hostname-$(hostname)"
 FORCE=0
 QUIET=0
 DRY_RUN=0
+NAME=""
+PROFILE=""
+DEFAULT_PROFILE="hostname-$(hostname)"
 
+# parse pre-command global flags
 while [[ $# -gt 0 ]]; do
   case "$1" in
     -f | --force)
@@ -367,6 +371,7 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+# no commands passed
 if [[ $# -eq 0 ]]; then
   usage
   exit 1
@@ -375,7 +380,7 @@ fi
 COMMAND="$1"
 shift
 
-# Handle per-command help flag early (e.g., "dickidots apply --help")
+# parse per-command help flag early (e.g., "dickidots apply --help")
 if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
   usage "$COMMAND"
   exit 0
@@ -432,9 +437,6 @@ case "$COMMAND" in
     ;;
 esac
 
-NAME=""
-PROFILE=""
-
 while [[ $# -gt 0 ]]; do
   case "$1" in
     -n | --name)
@@ -457,6 +459,14 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+if [ "$COMMAND" = "apply" ] && [ -z "$PROFILE" ]; then
+  PROFILE=$DEFAULT_PROFILE
+fi
+
+if [ "$COMMAND" = "new" ] && [ "$SUBCOMMAND" = "profile" ] && [ -z "$NAME" ]; then
+  NAME=$DEFAULT_PROFILE
+fi
+
 case "$COMMAND" in
   apply) cmd_apply ;;
   remove) cmd_remove ;;
@@ -471,4 +481,3 @@ case "$COMMAND" in
     exit 0
     ;;
 esac
-
