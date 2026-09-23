@@ -1,0 +1,6 @@
+NAME:
+   pkg-yazi
+
+DESCRIPTION:
+   This profile adds the official yazi package 
+   repo, istalls yazi, and links a configuration.

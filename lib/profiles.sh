@@ -221,3 +221,7 @@ resolve_profile_installs() {
     fi
   done
 }
+
+describe_profile() {
+  print_always "not implemented"
+}

@@ -92,6 +92,10 @@ cmd_remove() {
   finish_msg
 }
 
+cmd_describe() {
+  print_always "not implemented"
+}
+
 cmd_list() {
   if [ "$SUBCOMMAND" == "profile" ]; then
     list_profiles
@@ -204,6 +208,7 @@ Global Flags:
 Commands:
   apply     Apply profiles, configurations, or installations
   remove    Remove profiles, configurations, or installations
+  describe  Describe a profile
   list      List available profiles, configs, setups, or installs
   new       Create a new profile, config, setup, or install template
   doctor    Check system health and prerequisites
@@ -246,6 +251,17 @@ Options:
 EOF
 }
 
+_usage_describe() {
+  cat <<EOF
+Usage: $(_prog_name) describe -p <profile_name>
+
+Describe a profile.
+
+Options:
+  -p, --profile <name>    Target profile name (Required)
+  -h, --help              Show command help
+EOF
+}
 _usage_list() {
   cat <<EOF
 Usage: $(_prog_name) list <subcommand> [-p <profile_name>]
@@ -305,6 +321,7 @@ usage() {
   case "$command" in
     apply) _usage_apply ;;
     remove) _usage_remove ;;
+    describe) _usage_describe ;;
     list) _usage_list ;;
     new) _usage_new ;;
     doctor) _usage_doctor ;;
@@ -388,7 +405,7 @@ fi
 
 SUBCOMMAND=""
 case "$COMMAND" in
-  apply | remove)
+  apply | remove | describe)
     case "${1:-}" in
       config | install)
         SUBCOMMAND="$1"
@@ -459,7 +476,7 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [ "$COMMAND" = "apply" ] && [ -z "$PROFILE" ]; then
+if [ [ "$COMMAND" = "apply" ] || [ "$COMMAND" = "remove" ] || [ "$COMMAND" = "describe" ] ] && [ -z "$PROFILE" ]; then
   PROFILE=$DEFAULT_PROFILE
 fi
 
@@ -470,6 +487,7 @@ fi
 case "$COMMAND" in
   apply) cmd_apply ;;
   remove) cmd_remove ;;
+  describe) cmd_describe ;;
   list) cmd_list ;;
   new) cmd_new ;;
   doctor) cmd_doctor ;;
