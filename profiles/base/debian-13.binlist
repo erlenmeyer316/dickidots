@@ -33,3 +33,4 @@ apt:xsel
 apt:yazi
 apt:zip
 apt:zoxide
+apt:pipx
