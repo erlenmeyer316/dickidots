@@ -17,6 +17,7 @@ pkg_install() {
   else
     pipx install "${pkgs_in[*]}"
   fi
+  exit 0
 }
 
 pkg_uninstall() {
@@ -33,7 +34,11 @@ pkg_uninstall() {
 }
 
 pkg_is_installed() {
-  pip index versions "$1" &>/dev/null
+  if pip index versions "$1" | grep -q "ERROR"; then
+    return 0
+  else
+    return 1
+  fi
 }
 
 pkg_exists() {

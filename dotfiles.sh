@@ -476,8 +476,10 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [ [ "$COMMAND" = "apply" ] || [ "$COMMAND" = "remove" ] || [ "$COMMAND" = "describe" ] ] && [ -z "$PROFILE" ]; then
-  PROFILE=$DEFAULT_PROFILE
+if [ "$COMMAND" = "apply" ] || [ "$COMMAND" = "remove" ] || [ "$COMMAND" = "describe" ]; then  
+  if [ -z "$PROFILE" ]; then
+     PROFILE=$DEFAULT_PROFILE
+  fi
 fi
 
 if [ "$COMMAND" = "new" ] && [ "$SUBCOMMAND" = "profile" ] && [ -z "$NAME" ]; then

@@ -75,7 +75,7 @@ install() {
     unset IFS
 
     if [ "$key" != "$pm" ]; then
-      print_msg "not valid package" "$quiet"
+      #print_msg "not valid package" "$quiet"
       continue
     fi
 
@@ -102,7 +102,6 @@ install() {
   done
 
   pkg_install available "$dry_run" "$force" "$quiet"
-
 }
 
 uninstall() {
