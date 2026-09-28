@@ -3,6 +3,13 @@
 pm="pipx"
 
 pkg_update_repos() {
+  local dry_run=$1
+  local force=$2
+  local quiet=$3
+
+  if [[ $dry_run -eq 1 ]]; then
+    print_msg "[${pm}] no-op (pipx has no repo update step)"
+  fi
   return 0
 }
 
@@ -15,9 +22,10 @@ pkg_install() {
   if [[ $dry_run -eq 1 ]]; then
     print_msg "[${pm}] pipx install ${pkgs_in[*]}"
   else
-    pipx install "${pkgs_in[*]}"
+    for pkg in "${pkgs_in[@]}"; do
+      pipx install "$pkg"
+    done
   fi
-  exit 0
 }
 
 pkg_uninstall() {
@@ -29,23 +37,16 @@ pkg_uninstall() {
   if [[ $dry_run -eq 1 ]]; then
     print_msg "[${pm}] pipx uninstall ${pkgs_in[*]}"
   else
-    pipx uninstall "${pkgs_in[*]}"
+    for pkg in "${pkgs_in[@]}"; do
+      pipx uninstall "$pkg"
+    done
   fi
 }
 
 pkg_is_installed() {
-  if pip index versions "$1" | grep -q "ERROR"; then
-    return 0
-  else
-    return 1
-  fi
+  pipx list --short 2>/dev/null | awk '{print $1}' | grep -qx "$1"
 }
 
 pkg_exists() {
-
-  if pipx list --short | grep -q "^${1} "; then
-    return 0
-  else
-    return 1
-  fi
+  pip index versions "$1" &>/dev/null
 }
