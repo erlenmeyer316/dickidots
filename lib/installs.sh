@@ -34,7 +34,9 @@ apply_installs() {
 
   for driver in "${_SCRIPT_DIR}"/lib/drivers/*; do
     source "$driver"
-    install sorted "$dry_run" "$force" "$quiet"
+    if pkg_driver_available; then
+       install sorted "$dry_run" "$force" "$quiet"
+    fi
   done
 }
 

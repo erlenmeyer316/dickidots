@@ -2,6 +2,10 @@
 
 pm="go"
 
+pkg_driver_available() {
+  command -v go >/dev/null 2>&1;
+}
+
 pkg_update_repos() {
   local dry_run=$1
   local force=$2

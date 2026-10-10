@@ -2,6 +2,10 @@
 
 pm="apt"
 
+pkg_driver_available() {
+  command -v apt >/dev/null 2>&1;
+}
+
 pkg_update_repos() {
   local dry_run=$1
   local force=$2
