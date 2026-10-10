@@ -4,3 +4,6 @@ apt:libharfbuzz-dev
 apt:shellcheck
 apt:make
 apt:gcc
+apt:python3
+apt:pip
+apt:pipx

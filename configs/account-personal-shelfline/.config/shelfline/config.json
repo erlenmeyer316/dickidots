@@ -1,0 +1,14 @@
+{
+  "catalogs": [
+    {
+      "auth": {
+        "password": "change-me",
+        "username": "erlenmeyer316"
+      },
+      "name": "DickiBooks",
+      "url": "https://calibre-web.dickinet.info/opds"
+    }
+  ],
+  "library_path": "/home/erlenmeyer316/Books",
+  "preferences": {}
+}

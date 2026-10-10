@@ -1,1 +1,1 @@
-export XINIT_TTY="i3kiosk"
+export XINIT_I3KIOSK="i3kiosk"

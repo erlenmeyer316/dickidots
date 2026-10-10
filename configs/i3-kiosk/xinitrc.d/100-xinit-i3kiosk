@@ -2,8 +2,8 @@
 
 session="i3kiosk" 
 
-exset -dpms
+xset -dpms
 xset s off
 xset s noblank
 
-exec i3
+exec i3 -c "${HOME}/.config/i3/i3-kiosk-config"
