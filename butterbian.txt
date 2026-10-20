@@ -1,0 +1,79 @@
+I3 Package:
+
+1. Add pre-apply setup script for butterbian repos
+2. Add pre-apply setup script for directories
+3. Add packages to install via package manager
+4. Add pre-install setup script  for kitty
+5. Add pre-install setup script  for fonts
+6. Add pre-install setup script  for themes
+7. Add pre-install setup for optional 
+7. Add post-install script to start services
+8. Add config for dunst
+9. Add config for picom
+10. Add config for rofi
+11. Add config for scripts
+12. Add config for sxhkd
+13. Add config for themes
+14. Add config for i3 + startwm
+
+
+
+
+
+
+
+
+
+
+1. add butterbian repo (for picom,rofi, etc..)
+2. install packages from list
+3. enable services
+4. apply configs
+5. setup directories
+6. drop quickstart cheatsheet
+7. run script to install kitty
+8. run script to install fonts
+9. run script to install themes
+10. download wallpapers
+11. install lightdm
+*12. install optional tools
+13 add ./local/bin to cheatsheet
+
+
+* Optional tools
+
+# BUTTERSCRIPTS
+
+1. butterbash modular bash profile
+2. butterzh modular zsh configs
+3. geany text editor
+4. brownsers
+requirement - wget curl apt-transport-https gnupg ca-certificates software-properties-common
+browsers - helium firefox librewolf brave floorp zen browser chromium qutebrowser 
+5. discord
+6. fastfetch
+7. neovim
+8. wezterm
+9 ghostty
+10. mise
+
+# APT PACKAGES
+1. file_manager options
+thunar pcmanfm krusader nautilus nemo dolphin ranger nnn lf
+2. graphics options
+gimp flameshot eog sxiv qingv inkscape maim
+3. terminal options
+alacritty gnome-terminal kitty konsole therminator xfce4-terminal
+4. text editor options
+kate gedit l3afpad mousepad pluma
+5. multimedia options
+mpv vlc audacity kdenlive obs-studio rhythmbox ncmpcpp mkvtoolnix-gui
+6. utilities options
+gparted gnome-disk-utility nitrogen numlockx galculator cpu-x dnsutils whois curl tree btop htop bat brightnessctl
+
+# PRINTER SUPPORT
+cups cups-client cups-filters cups-browsed avahi-daemon ipp-usb printer-driver-cups-pdf system-config-printer sane-utils sane-airscan simple-scan
+
+# BLUETOOTH SUPPORT
+bluez bluez-tools blueman libspa-0.2-bluetooth pulseaudio-module-bluetooth
+
