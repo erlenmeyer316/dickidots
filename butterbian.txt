@@ -1,10 +1,10 @@
 I3 Package:
 
-1. Add pre-apply setup script for butterbian repos
-2. Add pre-apply setup script for directories
+xx 1. Add pre-apply setup script for butterbian repos
+xx 2. Add pre-apply setup script for directories
 3. Add packages to install via package manager
 4. Add pre-install setup script  for kitty
-5. Add pre-install setup script  for fonts
+xx 5. Add pre-install setup script  for fonts
 6. Add pre-install setup script  for themes
 7. Add pre-install setup for optional 
 7. Add post-install script to start services

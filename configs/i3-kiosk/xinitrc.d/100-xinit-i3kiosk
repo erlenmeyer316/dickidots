@@ -1,9 +1,0 @@
-#!/bin/bash
-
-session="i3kiosk" 
-
-xset -dpms
-xset s off
-xset s noblank
-
-exec i3 -c "${HOME}/.config/i3/i3-kiosk-config"

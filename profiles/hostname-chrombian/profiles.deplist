@@ -1,4 +1,3 @@
-app-set-personal-tty
-app-set-personal-x11-term
-app-set-suckless-desktop
-app-set-i3
+base
+base-dev
+app-set-personal

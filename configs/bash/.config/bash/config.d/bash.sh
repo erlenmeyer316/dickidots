@@ -27,5 +27,3 @@ export XDG_DATA_HOME="${XDG_DATA_HOME:=$HOME/.local/share}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME:=$HOME/.local/cache}"
 # where user specific state files should be written (analogous to /var/lib)
 export XDG_STATE_HOME="${XDG_STATE_HOME:=$HOME/.local/state}"
-
-export XINIT_TTY="tty"

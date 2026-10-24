@@ -1,0 +1,8 @@
+apt:i3
+apt:xinit
+apt:libx11-dev
+apt:libxft-dev
+apt:libxext-dev
+apt:xclip
+apt:xsel
+apt:libharfbuzz-dev
