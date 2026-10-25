@@ -1,0 +1,22 @@
+#!/bin/bash
+# scratchpad — toggle a class-tagged kitty window via i3's scratchpad.
+# Usage: scratchpad [class] [command]
+# Examples:
+#   scratchpad                    # terminal scratchpad
+#   scratchpad pulsemixer pulsemixer
+#   scratchpad htop htop
+
+CLASS="${1:-scratchpad}"
+CMD="${2:-}"
+
+id=$(xdotool search --class "$CLASS")
+
+if [ -z "$id" ]; then
+    if [ -n "$CMD" ]; then
+        kitty --class "$CLASS" -e $CMD &
+    else
+        kitty --class "$CLASS" &
+    fi
+else
+    i3-msg "[class=\"$CLASS\"] scratchpad show"
+fi

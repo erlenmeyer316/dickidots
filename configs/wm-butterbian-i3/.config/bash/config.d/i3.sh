@@ -1,1 +1,1 @@
-export XINIT_I3="i3"
+export XINIT_BUTTERBIAN="butterbian"

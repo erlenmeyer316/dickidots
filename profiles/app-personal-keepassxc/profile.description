@@ -1,0 +1,7 @@
+NAME:
+   app-personal-keepassxc
+
+DESCRIPTION:
+   This profile installs keeepassxc as well as
+   the necessary syncthing dependencies for
+   my personal secrets

@@ -7,6 +7,7 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/profiles.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/configs.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/installs.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/setups.sh"
+#source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/doctor.sh"
 
 finish_msg() {
   if file_exists "$HOME/.profile"; then
@@ -187,7 +188,13 @@ cmd_new() {
 
 }
 
-#cmd_doctor() {}
+#cmd_doctor() {
+#  if [ -z "$SUBCOMMAND" ]; then
+#  fi
+#
+#  if [ "$SUBCOMMAND" == "fix" ]; then
+#  fi
+#}
 
 _prog_name() {
   basename "${BASH_SOURCE[0]:-$0}"

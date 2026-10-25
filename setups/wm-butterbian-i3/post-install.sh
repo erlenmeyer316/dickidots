@@ -2,8 +2,10 @@
 
 set -euo pipefail
 
-exec "./scripts/install_ly.sh"
-exec "./scripts/install_nerdfonts.sh"
-exec "./scripts/install_theme.sh"
-exec "./scripts/download_wallpapers.sh"
-exec "./scripts/kitty/install_kitty.sh"
+#exec "./scripts/install-ly.sh"
+bash "./scripts/install-nerdfonts.sh"
+bash "./scripts/install-theme.sh"
+bash "./scripts/download-wallpapers.sh"
+bash "./scripts/kitty/install_kitty.sh"
+bash "./scripts/install-bluetooth-support.sh"
+bash "./scripts/install-printing-support.sh"

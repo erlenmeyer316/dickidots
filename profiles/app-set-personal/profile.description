@@ -1,0 +1,6 @@
+NAME:
+   app-set-personal
+
+DESCRIPTION:
+   This profile mass installs all "personal"
+   profiles at once

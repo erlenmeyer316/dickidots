@@ -1,9 +1,0 @@
-#!/bin/bash
-
-session="x11tmux" 
-
-xset -dpms
-xset s off
-xset s noblank
-
-exec i3 -c "${HOME}/.config/i3/x11-tmux-config"

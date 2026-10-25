@@ -2,4 +2,4 @@
 
 set -euo pipefail
 
-exec "./scripts/add_butterrepo.sh"
+bash "./scripts/add-butterrepo.sh"

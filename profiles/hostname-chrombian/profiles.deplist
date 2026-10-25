@@ -1,3 +1,7 @@
 base
 base-dev
 app-set-personal
+wm-butterbian-i3
+wm-kiosk-i3
+wm-suckless-dwm
+wm-tty-tmux
