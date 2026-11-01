@@ -2,4 +2,6 @@
 
 set -euo pipefail
 
-bash "./scripts/add-butterrepo.sh"
+readonly THIS_DIR="$(cd "$(dirname "$0")" >/dev/null 2>&1 && pwd)"
+bash "${THIS_DIR}/scripts/add-butterrepo.sh"
+

@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+prefix="XINIT_"
+  
+ echo "Available WMs"
+ echo "==================="
+  while IFS= read -r name <&3; do
+     echo "  ${!name}"
+done 3< <(compgen -e "$prefix")
+
+

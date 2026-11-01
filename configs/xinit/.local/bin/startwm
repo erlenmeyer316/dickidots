@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-# kp — keepassxc-cli wrapper
-# Deps: keepassxc-cli, libsecret-tools, fzf, xclip/xsel
 
 set -euo pipefail
 
