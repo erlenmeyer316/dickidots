@@ -1,0 +1,310 @@
+# === LAUNCH ===
+
+# Launch Rofi Application Menu
+alt + space
+	rofi -show drun -modi drun -line-padding 4 -hide-scrollbar -show-icons -theme ~/.config/i3/rofi/config.rasi
+
+# Launch Terminal 
+alt + Return
+	st
+
+# === WINDOW STATE ===
+
+# Toggle Floating
+alt + shift + f
+	i3-msg floating toggle
+
+# Toggle Fullscreen
+alt + f
+	i3-msg fullscreen toggle
+
+# === WINDOW NAVIGATION ===
+
+# Focus Left
+alt + h
+	i3-msg focus left
+
+# Focus Down
+alt + j
+	i3-msg focus down
+
+# Focus Up
+alt + k
+	i3-msg focus up
+
+# Focus Right
+alt + l
+	i3-msg focus right
+
+# Move Window Left
+ctrl + alt + h
+	i3-msg move left
+
+# Move Window Down
+ctrl + alt + j
+	i3-msg move down
+
+# Move Window Up
+ctrl + alt + k
+	i3-msg move up
+
+# Move Window Right
+ctrl + alt + l
+	i3-msg move right
+
+# Focus Left (Arrow)
+alt + Left
+	i3-msg focus left
+
+# Focus Down (Arrow)
+alt + Down
+	i3-msg focus down
+
+# Focus Up (Arrow)
+alt + Up
+	i3-msg focus up
+
+# Focus Right (Arrow)
+alt + Right
+	i3-msg focus right
+
+# Move Window Left (Arrow)
+ctrl + alt + Left
+	i3-msg move left
+
+# Move Window Down (Arrow)
+ctrl + alt + Down
+	i3-msg move down
+
+# Move Window Up (Arrow)
+ctrl + alt + Up
+	i3-msg move up
+
+# Move Window Right (Arrow)
+ctrl + alt + Right
+	i3-msg move right
+
+# === WINDOW RESIZE ===
+
+# Resize Grow Width
+ctrl + shift + h
+	i3-msg resize grow width 3 px or 3 ppt
+
+# Resize Shrink Height
+ctrl + shift + j
+	i3-msg resize shrink height 3 px or 3 ppt
+
+# Resize Grow Height
+ctrl + shift + k
+	i3-msg resize grow height 3 px or 3 ppt
+
+# Resize Shrink Width
+ctrl + shift + l
+	i3-msg resize shrink width 3 px or 3 ppt
+
+# Resize Grow Width (Arrow)
+ctrl + shift + Left
+	i3-msg resize grow width 3 px or 3 ppt
+
+# Resize Shrink Height (Arrow)
+ctrl + shift + Down
+	i3-msg resize shrink height 3 px or 3 ppt
+
+# Resize Grow Height (Arrow)
+ctrl + shift + Up
+	i3-msg resize grow height 3 px or 3 ppt
+
+# Resize Shrink Width (Arrow)
+ctrl + shift + Right
+	i3-msg resize shrink width 3 px or 3 ppt
+
+# === LAYOUTS ===
+
+# Layout Tabbed
+#super + w
+#	i3-msg layout tabbed
+
+# Cycle Layout (split → tabbed → stacking)
+#super + t
+#	i3-msg layout toggle split tabbed stacking
+
+# Cycle through tabs / siblings in current container
+alt + Tab
+	i3-msg focus next
+
+alt + shift + Tab
+	i3-msg focus prev
+
+# === WM CONTROL ===
+
+# Reload sxhkd Config
+alt + Escape
+	pkill -USR1 -x sxhkd; notify-send 'sxhkd' 'Reloaded config'
+
+# Reload i3 Config
+alt + shift + r
+	i3-msg reload; notify-send 'i3' 'Reloaded'
+
+# Exit i3
+#alt + shift + e
+	i3-nagbar -t warning -m "End your X session?"" -B "Yes, exit i3"; i3-msg exit
+  #i3-msg exit
+
+# Close Window
+alt + q
+	i3-msg kill
+
+alt + shift + q
+  i3-msg kill
+
+# === WORKSPACES ===
+
+# Switch to Workspace 1
+alt + 1
+	i3-msg workspace 1
+
+# Switch to Workspace 2
+alt + 2
+	i3-msg workspace 2
+
+# Switch to Workspace 3
+alt + 3
+	i3-msg workspace 3
+
+# Switch to Workspace 4
+alt + 4
+	i3-msg workspace 4
+
+# Switch to Workspace 5
+alt + 5
+	i3-msg workspace 5
+
+# Switch to Workspace 6
+alt + 6
+	i3-msg workspace 6
+
+# Switch to Workspace 7
+alt + 7
+	i3-msg workspace 7
+
+# Switch to Workspace 8
+alt + 8
+	i3-msg workspace 8
+
+# Switch to Workspace 9
+alt + 9
+	i3-msg workspace 9
+
+# Switch to Workspace 10
+alt + 0
+	i3-msg workspace 10
+
+# Switch to Workspace 11
+#super + minus
+#	i3-msg workspace 11
+
+# Switch to Workspace 12
+#super + equal
+#	i3-msg workspace 12
+
+# Move to Workspace 1
+alt + shift + 1
+	i3-msg move container to workspace number 1
+
+# Move to Workspace 2
+alt + shift + 2
+	i3-msg move container to workspace number 2
+
+# Move to Workspace 3
+alt + shift + 3
+	i3-msg move container to workspace number 3
+
+# Move to Workspace 4
+alt + shift + 4
+	i3-msg move container to workspace number 4
+
+# Move to Workspace 5
+super + shift + 5
+	i3-msg move container to workspace number 5
+
+# Move to Workspace 6
+alt + shift + 6
+	i3-msg move container to workspace number 6
+
+# Move to Workspace 7
+alt + shift + 7
+	i3-msg move container to workspace number 7
+
+# Move to Workspace 8
+alt + shift + 8
+	i3-msg move container to workspace number 8
+
+# Move to Workspace 9
+alt + shift + 9
+	i3-msg move container to workspace number 9
+
+# Move to Workspace 10
+alt + shift + 0
+	i3-msg move container to workspace number 10
+
+# Move to Workspace 11
+#super + shift + minus
+#	i3-msg move container to workspace number 11
+
+# Move to Workspace 12
+#super + shift + equal
+#	i3-msg move container to workspace number 12
+
+# === MEDIA & BRIGHTNESS ===
+
+# Volume Up
+#super + F12
+#	~/.config/i3/scripts/changevolume up
+
+# Volume Down
+#super + F11
+#	~/.config/i3/scripts/changevolume down
+
+# Toggle Mute
+#super + F10
+#	~/.config/i3/scripts/changevolume mute
+
+# Dedicated Key for Volume Up
+#XF86AudioRaiseVolume
+#	~/.config/i3/scripts/changevolume up
+
+# Dedicated Key for Volume Down
+#XF86AudioLowerVolume
+#	~/.config/i3/scripts/changevolume down
+
+# Dedicated Key for Mute
+#XF86AudioMute
+#	~/.config/i3/scripts/changevolume mute
+
+# Brightness Up (Media Key)
+#XF86MonBrightnessUp
+#	xbacklight +10
+
+# Brightness Down (Media Key)
+#XF86MonBrightnessDown
+#	xbacklight -10
+
+# === SCREENSHOTS ===
+
+# Take a Screenshot (Region Select)
+#super + shift + s
+#	flameshot gui --path ~/Screenshots/
+
+# Take a Fullscreen Screenshot
+#super + s
+#	flameshot full --path ~/Screenshots/
+
+# === SYSTEM ===
+
+# Theme Switcher
+#super + shift + t
+#	~/.config/i3/scripts/thememenu
+
+# Shutdown or Reboot
+alt + e
+	~/.config/i3/scripts/i3-power

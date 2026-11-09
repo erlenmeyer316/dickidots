@@ -15,7 +15,7 @@ if ! command -v make >/dev/null 2>&1; then
     exit 0
 fi
 
-ST_BUILD_DIR="/tmp//build/dmenu"
+ST_BUILD_DIR="/tmp/build/dmenu"
 ST_GIT_REPO="https://github.com/erlenmeyer316/dmenu"
 
 rm -rf "$ST_BUILD_DIR"

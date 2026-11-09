@@ -15,7 +15,7 @@ if ! command -v make >/dev/null 2>&1; then
     exit 0
 fi
 
-ST_BUILD_DIR="/tmp//build/slstatus"
+ST_BUILD_DIR="/tmp/build/slstatus"
 ST_GIT_REPO="https://github.com/erlenmeyer316/slstatus"
 
 rm -rf "$ST_BUILD_DIR"
