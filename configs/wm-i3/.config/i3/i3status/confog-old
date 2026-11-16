@@ -1,0 +1,68 @@
+general {
+  output_format = "i3bar"
+  separator = " | "
+  interval = 5
+  
+  colors = true
+  color_good = "#55E17A"
+  color_degraded = "#FFB84D"
+  color_bad = "#FF5C5C"
+  color_separator = "#286B45"
+}
+
+order += "wireless _first_"
+order += "ethernet _first_"
+order += "memory"
+order += "cpu_usage"
+order += "disk /"
+order += "volume master"
+order += "battery all"
+order += "tztime local"
+
+wireless _first_ {
+  format_up = " %essid"
+  format_down = "  off"
+}
+
+ethernet _first_ {
+  format = " up"
+  format = " down"
+}
+
+memory {
+  format = " %used / %total"
+  threshold_degraded = "20%"
+  format_degraded = " LOW %used / %total"
+}
+
+cpu_usage {
+  format = " %usage"
+  degraded_threshold = 70
+  max_threshold = 90
+}
+
+disk "/" {
+  format = " %used / %total"
+}
+
+volume master {
+  format = " %volume"
+  format_muted = " muted"
+  device = "default"
+  mixer = "Master"
+}
+
+battery all {
+  format = "%status %percentage"
+  status_chr = ""
+  status_bat = ""
+  status_full = ""
+  status_unk = ""
+  low_threshold = 15
+  threshold_type = percentage
+  integer_battery_capacity = true
+}
+
+tztime local {
+  format = "%a %b %d  %H:%M"
+}

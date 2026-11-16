@@ -2,11 +2,16 @@
 
 # Launch Rofi Application Menu
 alt + space
-	rofi -show drun -modi drun -line-padding 4 -hide-scrollbar -show-icons -theme ~/.config/i3/rofi/config.rasi
+	dmenu_run -fn 'JetBrainsMono Nerd Font 10' -nb '#050907' -nf '#55E17A' -sb '#0B1410' -sf '#A0FFB2' -p '>'
+  #rofi -show drun -modi drun -line-padding 4 -hide-scrollbar -show-icons -theme ~/.config/i3/rofi/config.rasi
 
 # Launch Terminal 
 alt + Return
 	st
+
+# Launch browser
+alt + b
+  qutebrowser
 
 # === WINDOW STATE ===
 
@@ -146,9 +151,8 @@ alt + shift + r
 	i3-msg reload; notify-send 'i3' 'Reloaded'
 
 # Exit i3
-#alt + shift + e
-	i3-nagbar -t warning -m "End your X session?"" -B "Yes, exit i3"; i3-msg exit
-  #i3-msg exit
+alt + shift + e
+	i3-nagbar -t warning -m 'End your X session?' -B 'Yes, exit i3' 'i3-msg exit'
 
 # Close Window
 alt + q
@@ -199,61 +203,44 @@ alt + 9
 alt + 0
 	i3-msg workspace 10
 
-# Switch to Workspace 11
-#super + minus
-#	i3-msg workspace 11
-
-# Switch to Workspace 12
-#super + equal
-#	i3-msg workspace 12
-
 # Move to Workspace 1
 alt + shift + 1
-	i3-msg move container to workspace number 1
+	i3-msg move container to workspace number 1; i3-msg workspace number 1
 
 # Move to Workspace 2
 alt + shift + 2
-	i3-msg move container to workspace number 2
-
+	i3-msg move container to workspace number 2; i3-msg workspace number 2
 # Move to Workspace 3
 alt + shift + 3
-	i3-msg move container to workspace number 3
+	i3-msg move container to workspace number 3; i3-msg workspace number 3
 
 # Move to Workspace 4
 alt + shift + 4
-	i3-msg move container to workspace number 4
+	i3-msg move container to workspace number 4; i3-msg workspace number 4
 
 # Move to Workspace 5
 super + shift + 5
-	i3-msg move container to workspace number 5
+	i3-msg move container to workspace number 5; i3-msg workspace number 5
 
 # Move to Workspace 6
 alt + shift + 6
-	i3-msg move container to workspace number 6
+	i3-msg move container to workspace number 6; i3-msg workspace number 6
 
 # Move to Workspace 7
 alt + shift + 7
-	i3-msg move container to workspace number 7
+	i3-msg move container to workspace number 7; i3-msg workspace number 7
 
 # Move to Workspace 8
 alt + shift + 8
-	i3-msg move container to workspace number 8
+	i3-msg move container to workspace number 8; i3-msg workspace number 8
 
 # Move to Workspace 9
 alt + shift + 9
-	i3-msg move container to workspace number 9
+	i3-msg move container to workspace number 9; i3-msg workspace number 9
 
 # Move to Workspace 10
 alt + shift + 0
-	i3-msg move container to workspace number 10
-
-# Move to Workspace 11
-#super + shift + minus
-#	i3-msg move container to workspace number 11
-
-# Move to Workspace 12
-#super + shift + equal
-#	i3-msg move container to workspace number 12
+	i3-msg move container to workspace number 10; i3-msg workspace number 10
 
 # === MEDIA & BRIGHTNESS ===
 
@@ -306,5 +293,5 @@ alt + shift + 0
 #	~/.config/i3/scripts/thememenu
 
 # Shutdown or Reboot
-alt + e
-	~/.config/i3/scripts/i3-power
+#alt + e
+#	~/.config/i3/scripts/i3-power

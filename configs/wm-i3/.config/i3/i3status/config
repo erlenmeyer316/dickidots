@@ -1,0 +1,85 @@
+
+general {
+    output_format = "i3bar"
+    colors = true
+    interval = 5
+
+    color_good = "#55E17A"
+    color_degraded = "#FFB84D"
+    color_bad = "#FF5C5C"
+    color_separator = "#286B45"
+}
+
+# Network
+order += "ethernet _first_"
+order += "wireless _first_"
+
+# Audio and power
+order += "volume master"
+order += "battery all"
+
+# System
+order += "disk /"
+order += "memory"
+order += "cpu_usage"
+
+# Clock
+order += "tztime local"
+
+ethernet _first_ {
+    format_up = " %ip"
+    format_down = " down"
+}
+
+wireless _first_ {
+    format_up = " %essid %quality"
+    format_down = "󰖪 disconnected"
+}
+
+volume master {
+    format = " %volume"
+    format_muted = "󰝟 muted"
+    device = "default"
+
+    # If you use ALSA and this doesn't show a level, set the mixer
+    # to the name of your actual sound control, often "Master".
+    # mixer = "Master"
+}
+
+battery all {
+    format = "%status %percentage %remaining"
+    format_down = "No battery"
+
+    # The plug appears while charging; the battery glyph appears
+    # while discharging. The status text also shows the state.
+    status_chr = ""
+    status_bat = ""
+    status_full = ""
+    status_unk = ""
+
+    integer_battery_capacity = true
+    low_threshold = 15
+    threshold_type = "percentage"
+}
+
+disk "/" {
+    format = " %percentage_used"
+}
+
+memory {
+    format = " %used"
+    unit = "Gi"
+    decimals = 1
+    threshold_degraded = "10%"
+    threshold_critical = "5%"
+}
+
+cpu_usage {
+    format = " %usage"
+    degraded_threshold = 70
+    max_threshold = 90
+}
+
+tztime local {
+    format = " %a %b %d   %r"
+}

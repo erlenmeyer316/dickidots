@@ -6,4 +6,7 @@ apt:libxft-dev
 apt:libxext-dev
 apt:xclip
 apt:xsel
-apt:rofi
+apt:jq
+apt:brightnessctl
+apt:bluez-tools
+apt:bluez
