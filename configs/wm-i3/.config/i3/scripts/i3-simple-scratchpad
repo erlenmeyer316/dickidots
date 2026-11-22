@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+# Uncomment to write logs to some file.
+# exec >> "$HOME/i3-simple-scratchpad.log" 2>&1
+
+max_poll_ms=5000 # Max time to wait for program to start in milliseconds.
+poll_rate_s=0.2  # Time between polls in seconds.
+
+usage() {
+    echo "Usage: $0 <title> <size> <cmd>"
+    echo ""
+    echo "  title   The window title that will be used to identify the target program's window. Must match the title of the node in i3." 
+    echo "  size    Scratch window height and width. Example: \"800 500\""
+    echo "  cmd     Command to start the target program. Example: alacritty --title=\"pulsemixer\" -e pulsemixer"
+    echo ""
+    echo "If the program does not allow you to explicitly set the window title, you can find out the title value like this: Start your target program normally, then run \"i3-msg get_tree | jq '.nodes'\" and find your program's node. The title is found in \".window_properties.title\""
+    echo ""
+    echo "i3 config examples:"
+    echo ""
+    echo "  bindsym \$mod+p exec i3-simple-scratch Bitwarden \"800 1200\" \"bitwarden\""
+    echo "  bindsym \$mod+o exec i3-simple-scratch audio \"800 500\" \"alacritty --title audio -e pulsemixer\""
+
+    exit 1
+}
+
+if [[ -z $1 || -z $2 || -z $3 ]]; then
+    usage
+fi
+
+title=$1
+size=$2
+cmd=$3
+
+# Check if program is already running, i.e. there is an i3 node with the expected title.
+find_node() {
+    node=$(i3-msg -t get_tree  | jq --arg title "$title" '.. | select(.name? == $title)')
+}
+
+find_node
+
+if [ -z "$node" ]; then
+    echo "i3-simple-scratchpad - $title was not running, starting."
+    echo "i3-simple-scratchpad - $cmd"
+    $cmd &
+
+    start_ms=$(date +%s%3N)
+    end_ms=$((start_ms + max_poll_ms)) 
+    find_node
+
+    while [[ -z "$node" ]]; do
+        now="$(date +%s%3N)"
+        if (( $now > $end_ms )); then
+            echo "i3-simple-scratchpad - Exceeded max polling time. Exiting."
+            exit 0
+        fi
+        echo "i3-simple-scratchpad - Polling for startup of program ${title} until ${end_ms}"
+        sleep $poll_rate_s
+        find_node
+    done
+
+    echo "i3-simple-scratchpad - Moving ${title} to scratchpad"
+    i3-msg "[title=\"$title\"] floating enable"
+    i3-msg "[title=\"$title\"] resize set $size"
+    i3-msg "[title=\"$title\"] move position center"
+    i3-msg "[title=\"$title\"] move to scratchpad"
+fi
+
+echo "i3-simple-scratchpad - Toggling $title"
+i3-msg "[title=\"$title\"] scratchpad show"

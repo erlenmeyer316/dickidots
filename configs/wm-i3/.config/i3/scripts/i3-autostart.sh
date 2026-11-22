@@ -20,11 +20,11 @@
 #~/.config/i3/polybar/polybar-i3 &
 
 
-#lxpolkit &
-#xsettingsd &
-#dunst -config ~/.config/i3/dunst/dunstrc &
-#picom --config ~/.config/i3/picom/picom.conf -b &
-#feh --bg-fill ~/.config/i3/wallpaper/wallhaven-218x7m_3440x1440.png &
+lxpolkit &
+xsettingsd &
+dunst -config ~/.config/i3/dunst/i3-dunstrc &
+picom --config ~/.config/i3/picom/i3-picom.conf -b &
+feh --bg-fill ~/.config/i3/wallpaper/default.jpg &
 
 # sxhkd
 pkill -x sxhkd

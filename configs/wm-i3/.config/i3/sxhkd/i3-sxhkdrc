@@ -2,12 +2,16 @@
 
 # Launch Rofi Application Menu
 alt + space
-	dmenu_run -fn 'JetBrainsMono Nerd Font 10' -nb '#050907' -nf '#55E17A' -sb '#0B1410' -sf '#A0FFB2' -p '>'
+	dmenu_run -fn 'JetBrainsMono Nerd Font 10' -nb '#050907' -nf '#55E17A' -sb '#0B1410' -sf '#A0FFB2' 
   #rofi -show drun -modi drun -line-padding 4 -hide-scrollbar -show-icons -theme ~/.config/i3/rofi/config.rasi
 
 # Launch Terminal 
 alt + Return
 	st
+
+# Toggle Scratchpad Terminal
+alt + shift + Return
+	#~/.config/i3/scripts/scratchpad btop btop
 
 # Launch browser
 alt + b
@@ -151,15 +155,16 @@ alt + shift + r
 	i3-msg reload; notify-send 'i3' 'Reloaded'
 
 # Exit i3
-alt + shift + e
-	i3-nagbar -t warning -m 'End your X session?' -B 'Yes, exit i3' 'i3-msg exit'
+alt + shift + q
+	~/.config/i3/scripts/i3-power
+	#i3-nagbar -t warning -m 'End your X session?' -B 'Yes, exit i3' 'i3-msg exit'
 
 # Close Window
 alt + q
 	i3-msg kill
 
-alt + shift + q
-  i3-msg kill
+#alt + shift + q
+#  i3-msg kill
 
 # === WORKSPACES ===
 
@@ -295,3 +300,6 @@ alt + shift + 0
 # Shutdown or Reboot
 #alt + e
 #	~/.config/i3/scripts/i3-power
+
+alt + shift + l
+  i3lock

@@ -10,6 +10,7 @@ include $HOME/.config/i3/i3-bar.conf
 # Add padding to window titles
 for_window [class=".*"] title_format "  %title"
 
+
 exec_always --no-startup-id ~/.config/i3/scripts/i3-autostart.sh
 
 # Use Mouse+$mod to drag floating windows to their wanted position
