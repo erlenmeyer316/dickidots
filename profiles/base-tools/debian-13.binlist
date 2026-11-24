@@ -1,7 +1,5 @@
 apt:ranger
-apt:zram-tools
 apt:brightnessctl
-apt:sxhkd
 apt:btop
 apt:curl
 apt:build-essential

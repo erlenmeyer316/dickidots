@@ -2,3 +2,6 @@ apt:xserver-xorg-core
 apt:xserver-xorg-input-libinput
 apt:xinit
 apt:xterm
+apt:xclip
+apt:xsel
+apt:sxhkd

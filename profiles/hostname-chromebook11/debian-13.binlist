@@ -1,1 +1,2 @@
 apt:firmware-intel-sound
+apt:zram-tools
