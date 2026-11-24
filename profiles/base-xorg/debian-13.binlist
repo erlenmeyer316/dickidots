@@ -1,0 +1,4 @@
+apt:xserver-xorg-core
+apt:xserver-xorg-input-libinput
+apt:xinit
+apt:xterm

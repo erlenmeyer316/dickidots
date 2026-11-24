@@ -8,7 +8,15 @@ command_exists() { command -v "$1" >/dev/null 2>&1; }
 
 file_exists() { [[ -f "$1" ]]; }
 
+file_empty() { 
+  if [[ -f "$1" ]] && grep -q '[^[:space:]]' "$1"; then 
+    return 1 
+  fi
+}
+
 dir_exists() { [[ -d "$1" ]]; }
+
+var_empty() { [[ "$1" =~ [^[:space:]] ]] }
 
 print_msg() { [[ "${2}" -eq 0 ]] && printf "%s\n" "$1"; }
 

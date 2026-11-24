@@ -84,6 +84,7 @@ list_profile_dependencies() {
 }
 
 resolve_profiles() {
+  print_always "${1}"
   if [[ -z "${1}" ]]; then
     print_always "Error:${FUNCNAME[0]}:Missing parameter: No profile given."
     exit 1
@@ -104,11 +105,13 @@ resolve_profiles() {
     exit 1
   fi
 
-  if file_exists "${deplist}"; then
+  if ! file_empty "${deplist}"; then
     while IFS= read -r dep; do
-      if ! array_contains "$dep" "${array_out[@]}"; then
-        array_out+=("$dep")
-        resolve_profiles "$dep" "$2"
+      if var_empty "$dep"; then
+        if ! array_contains "$dep" "${array_out[@]}"; then
+          array_out+=("$dep")
+          resolve_profiles "$dep" "$2"
+        fi
       fi
     done <"${deplist}"
   fi
@@ -143,11 +146,13 @@ resolve_profile_configs() {
       exit 1
     fi
 
-    if file_exists "${deplist}"; then
+    if ! file_empty "${deplist}"; then
       while IFS= read -r dep; do
-        if ! array_contains "$dep" "${array_out[@]}"; then
-          array_out+=("$dep")
-        fi
+        if var_empty "$dep"; then
+	  if ! array_contains "$dep" "${array_out[@]}"; then
+            array_out+=("$dep")
+          fi
+	fi
       done <"${deplist}"
     fi
   done
@@ -178,11 +183,13 @@ resolve_profile_setups() {
       exit 1
     fi
 
-    if file_exists "${deplist}"; then
+    if ! file_empty "${deplist}"; then
       while IFS= read -r dep; do
-        if ! array_contains "$dep" "${array_out[@]}"; then
-          array_out+=("$dep")
-        fi
+        if var_empty "$dep"; then
+	  if ! array_contains "$dep" "${array_out[@]}"; then
+            array_out+=("$dep")
+          fi
+	fi
       done <"${deplist}"
     fi
   done
@@ -212,11 +219,13 @@ resolve_profile_installs() {
       print_always "Error: profile ${profile} doesn't exist."
       exit 1
     fi
-    if file_exists "${deplist}"; then
+    if ! file_empty "${deplist}"; then
       while IFS= read -r dep; do
-        if ! array_contains "$dep" "${array_out[@]}"; then
-          array_out+=("$dep")
-        fi
+        if var_empty "$dep"; then
+	  if ! array_contains "$dep" "${array_out[@]}"; then
+            array_out+=("$dep")
+          fi
+	fi
       done <"${deplist}"
     fi
   done

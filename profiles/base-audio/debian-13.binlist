@@ -1,0 +1,7 @@
+apt:pipewire
+apt:wireplumber
+apt:pipewire-pulse
+apt:libspa-0.2-bluetooth
+apt:alsa-utils
+apt:alsa-ucm-conf
+apt:dbus-user-session

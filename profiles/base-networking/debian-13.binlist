@@ -1,0 +1,5 @@
+apt:network-manager
+apt:firmware-lwlwifiw
+apt:cifs-utils
+apt:sshfs
+apt:nfs-common
